@@ -1,0 +1,24 @@
+{
+	"general": {
+		"main-foreground":  "BCC6EF",
+		"main-background":  "1A1B26",
+		
+		"panel-background": "16161E",
+		"panel-foreground": "BCC6EF",
+		"panel-border":     "101014",
+		
+		"menubar-background": "16161E",
+		"menubar-border":     "101014",
+		"menubar-foreground": "787C99",
+		
+		"menubar-selected-background": "1E202E",
+		"menubar-selected-foreground": "A9B1D6",
+		
+		"tray-icon-foreground": "787C99",
+		
+		"view-title-foreground": "787C99",
+		"view-title-background": "16161E",
+		
+		"tab-selected-border": "3D59A1"
+	}
+}
