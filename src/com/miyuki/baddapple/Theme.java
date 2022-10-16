@@ -83,7 +83,31 @@ public class Theme {
 		
 		"view-title-background",
 		"view-title-foreground",
+
+		"tab-selected-background",
+		"tab-selected-foreground",
+		"tab-selected-border",
+		"tab-border",
+		"tab-foreground",
+		"tab-background",
+		"tab-close-color",
+
+		"tray-foreground",
+		"tray-background",
+		"tray-selected",
+		"tray-border",
 		
-		"tab-selected-border"
+		"editor-foreground",
+		"editor-background",
+		"editor-caret",
+		
+		"editor-current-line",
+		
+		"line-numbers-background",
+		"line-numbers-foreground",
+		"line-numbers-current",
+		
+		"scroller-background",
+		"scroller-foreground",
 	};
 }

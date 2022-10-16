@@ -2,10 +2,15 @@ package com.miyuki.baddapple;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.UIManager;
@@ -15,14 +20,20 @@ import com.miyuki.baddapple.ui.TabPanel;
 import com.miyuki.baddapple.ui.Tray;
 import com.miyuki.baddapple.ui.UIHelper;
 import com.miyuki.baddapple.ui.UIMenuBar;
-import com.miyuki.baddapple.views.FileExplorerView;
+import com.miyuki.baddapple.views.ModulesView;
+import com.miyuki.baddapple.views.explorer.FileExplorerView;
 
 public class BadApple extends JFrame {
 	private static final long serialVersionUID = 1345151351515L;
 	
+	public static BadApple Get;
+
+	public Tray sideTray;
+	public JSplitPane mainSplitPanel;
+	
 	JPanel contentPanel;
 	
-	Tray sideTray;
+	JMenuBar menuBar;
 	TabPanel tabPanel;
 	ConsolePanel consolePanel;
 	FileExplorerView fileExplorerView;
@@ -30,15 +41,12 @@ public class BadApple extends JFrame {
 	BadApple() {
 		super("BadApple Studio");
 		
-		JMenuBar menuBar = new UIMenuBar();
+		BadApple.Get = this;
+		
+		menuBar = new UIMenuBar();
+		MakeMenus();
 		setJMenuBar(menuBar);
 		
-		JMenu mnFile = new JMenu("File");
-		menuBar.add(mnFile);
-		
-		JMenu mnEdit = new JMenu("Edit");
-		menuBar.add(mnEdit);
-	
 		contentPanel = new JPanel();
 		contentPanel.setBackground(Theme.GetColor("main-background"));
 		contentPanel.setLayout(new BorderLayout());
@@ -49,7 +57,7 @@ public class BadApple extends JFrame {
 		
 		setIconImage(Resource.GetImage("icon.png").getImage());
 		
-		JSplitPane splitPane = UIHelper.ManufactureSplit(JSplitPane.HORIZONTAL_SPLIT);
+		mainSplitPanel = UIHelper.ManufactureSplit(JSplitPane.HORIZONTAL_SPLIT);
 		JSplitPane editorCmdSplit = UIHelper.ManufactureSplit(JSplitPane.VERTICAL_SPLIT);
 		
 		tabPanel = new TabPanel();
@@ -60,16 +68,39 @@ public class BadApple extends JFrame {
 			
 		fileExplorerView = new FileExplorerView();
 
-		splitPane.setLeftComponent(fileExplorerView);
-		splitPane.setRightComponent(editorCmdSplit);
+		mainSplitPanel.setLeftComponent(fileExplorerView);
+		mainSplitPanel.setRightComponent(editorCmdSplit);
 			
-		contentPanel.add(splitPane, BorderLayout.CENTER);
+		contentPanel.add(mainSplitPanel, BorderLayout.CENTER);
 		
 		sideTray = new Tray();
-		sideTray.AddTrayIcon(fileExplorerView.trayIcon, fileExplorerView);
+		sideTray.AddTrayIcon(fileExplorerView).SetSelected(true);
+		sideTray.AddTrayIcon(new ModulesView());
 		contentPanel.add(sideTray, BorderLayout.WEST);
 		
 		DiscordPresence.Init();
+	}
+	
+	public void MakeMenus() {
+		JMenu mnFile = new JMenu("File");
+		
+		JMenuItem mnOpenFolder = new JMenuItem("Open Folder");
+		mnOpenFolder.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				
+				if (chooser.showOpenDialog(BadApple.this) == JFileChooser.APPROVE_OPTION) {
+					fileExplorerView.OnFolderOpeningRequest(chooser.getSelectedFile());
+				}
+			}
+		});
+		mnFile.add(mnOpenFolder);
+		menuBar.add(mnFile);
+		
+		JMenu mnEdit = new JMenu("Edit");
+		menuBar.add(mnEdit);	
 	}
 	
 	public static void main(String[] args) {
@@ -79,11 +110,13 @@ public class BadApple extends JFrame {
 		UIManager.put("MenuItem.selectionForeground", Theme.GetColor("menubar-selected-foreground"));
 		UIManager.put("MenuItem.background", Theme.GetColor("menubar-background"));
 		UIManager.put("MenuItem.foreground", Theme.GetColor("menubar-foreground"));
+		UIManager.put("MenuItem.border", BorderFactory.createEmptyBorder());
 		
 		UIManager.put("Menu.selectionBackground", Theme.GetColor("menubar-selected-background"));
 		UIManager.put("Menu.selectionForeground", Theme.GetColor("menubar-selected-foreground"));
 		UIManager.put("Menu.background", Theme.GetColor("menubar-background"));
 		UIManager.put("Menu.foreground", Theme.GetColor("menubar-foreground"));
+		UIManager.put("Menu.border", BorderFactory.createEmptyBorder());
 
 		UIManager.put("Panel.background", Theme.GetColor("panel-background"));
 		UIManager.put("Panel.foreground", Theme.GetColor("panel-foreground"));
@@ -91,10 +124,10 @@ public class BadApple extends JFrame {
 		Font menuFont = Resource.DeriveMainFont(Font.PLAIN, 12);
 		UIManager.put("Menu.font", menuFont);
 		UIManager.put("MenuItem.font", menuFont);
-		/*UIManager.put("PopupMenu.border",
-				new LineBorder(Color.decode("#1e1e1e")));*/
+		UIManager.put("PopupMenu.border", BorderFactory.createEmptyBorder());
 		
 		BadApple badApple = new BadApple();
+		
 		badApple.setSize(800,600);
 		badApple.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		badApple.setLocationRelativeTo(null);

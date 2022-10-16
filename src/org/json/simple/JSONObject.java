@@ -16,6 +16,7 @@ import java.util.Map;
  * 
  * @author FangYidong<fangyidong@yahoo.com.cn>
  */
+@SuppressWarnings("rawtypes")
 public class JSONObject extends HashMap implements Map, JSONAware, JSONStreamAware{
 	
 	private static final long serialVersionUID = -503443796854799292L;
@@ -31,6 +32,7 @@ public class JSONObject extends HashMap implements Map, JSONAware, JSONStreamAwa
 	 * 
 	 * @param map
 	 */
+	@SuppressWarnings("unchecked")
 	public JSONObject(Map map) {
 		super(map);
 	}

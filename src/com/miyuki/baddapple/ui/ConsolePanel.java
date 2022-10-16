@@ -1,6 +1,5 @@
 package com.miyuki.baddapple.ui;
 
-import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.JLabel;
@@ -26,8 +25,5 @@ public class ConsolePanel extends JPanel {
 		maximizeLabel.setForeground(Theme.GetColor("panel-foreground"));
 		
 		add(maximizeLabel);
-		
-
-		setPreferredSize(new Dimension(32,32));
 	}
 }

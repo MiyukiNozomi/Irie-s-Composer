@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -14,14 +13,14 @@ import com.miyuki.baddapple.Theme;
 public abstract class View extends JPanel {
 	private static final long serialVersionUID = 15622626923534L;
 	
-	public ImageIcon trayIcon;
+	public String trayIconPath;
 	public String title;
 	
 	public JPanel content;
 	
-	public View(String title, ImageIcon trayIcon) {
+	public View(String title, String trayIconPath) {
 		this.title = title;
-		this.trayIcon = Resource.Resize(trayIcon, 32);
+		this.trayIconPath = trayIconPath;
 		
 		this.content = new JPanel();
 		this.content.setLayout(new BorderLayout());

@@ -19,6 +19,32 @@
 		"view-title-foreground": "787C99",
 		"view-title-background": "16161E",
 		
-		"tab-selected-border": "3D59A1"
+		"tab-selected-background": "16161E",
+		"tab-selected-foreground": "BCC6EF",
+		"tab-selected-border": "3D59A1",
+		
+		"tab-border": "101014",
+		"tab-foreground": "BCC6EF",
+		"tab-background": "16161E",
+		
+		"tab-close-color": "A9AFD6",
+		
+		"tray-background": "16161E",
+		"tray-foreground": "BCC6EF",
+		"tray-selected":   "3D59A1",
+		"tray-border":     "16161E",
+		
+		"editor-background": "1A1B26",
+		"editor-foreground": "ACB4DC",
+		"editor-caret": "ACB4DC",
+		
+		"line-numbers-background": "1A1B26",
+		"line-numbers-foreground": "293B54",
+		"line-numbers-current":    "657AA2",
+		
+		"editor-current-line": "1E202E",
+		
+		"scroller-foreground": "28293A",
+		"scroller-background": "1A1B26"
 	}
 }

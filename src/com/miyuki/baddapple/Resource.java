@@ -2,6 +2,7 @@ package com.miyuki.baddapple;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,11 +10,15 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.HashMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class Resource {
 	
 	public static Font mainFont = LoadFont("yaheiui.ttf");
+	
+	//TODO add support for custom fonts
+	public static Font editorFont = LoadFont("consolas.ttf").deriveFont(Font.PLAIN, 16);
 	
 	public static HashMap<String, ImageIcon> icons = new HashMap<String, ImageIcon>();
 
@@ -62,18 +67,29 @@ public class Resource {
 		if (icons.containsKey(key)) {
 			return icons.get(key);
 		} else {
-			ImageIcon src;
-			if (icons.containsKey(name)) {
-				src = icons.get(name);
-			} else {
-				src = new ImageIcon(GetResource("icons/" + name));
-				icons.put(name, src);
+			BufferedImage src;
+			
+			try {
+				src = ImageIO.read(GetResource("icons/" + name));
+			} catch(Exception e) {
+				System.err.println("Error! Failed to load icon: icons/" + name);
+				e.printStackTrace();
+				return null;
 			}
+			
 			//Modify image so that we can have it with a diferent color.
 			
-			//TODO modify image's color
+			for (int j = 0; j < src.getHeight();j++) {
+				for (int i = 0; i < src.getWidth(); i++) {
+					byte originalAlpha = ((byte)(src.getRGB(i, j) >>> 24));
+					Color c = new Color(color.getRed(), color.getGreen(), color.getBlue(), originalAlpha & 0xFF);
+					src.setRGB(i, j, c.getRGB());
+				}	
+			}
 			
-			return src;
+			ImageIcon finalIcon = new ImageIcon(src);
+			icons.put(key, finalIcon);
+			return finalIcon;
 		}
 	}
 	
