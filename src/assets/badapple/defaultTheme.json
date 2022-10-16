@@ -45,6 +45,8 @@
 		"editor-current-line": "1E202E",
 		
 		"scroller-foreground": "28293A",
-		"scroller-background": "1A1B26"
+		"scroller-background": "1A1B26",
+		
+		"explorer-colapse-extend-button": "6F675E"
 	}
 }

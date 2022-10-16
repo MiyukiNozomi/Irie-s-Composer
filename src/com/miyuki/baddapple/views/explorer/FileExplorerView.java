@@ -17,6 +17,7 @@ import javax.swing.tree.TreeCellRenderer;
 import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.Theme;
 import com.miyuki.baddapple.ui.UIHelper;
+import com.miyuki.baddapple.ui.UITree;
 import com.miyuki.baddapple.views.View;
 
 public class FileExplorerView extends View {
@@ -39,6 +40,7 @@ public class FileExplorerView extends View {
 		childFont = Resource.DeriveMainFont(Font.PLAIN, 12);
 		
 		tree = new JTree(new DefaultMutableTreeNode("Open a Folder :("));
+		tree.setUI(new UITree());
 		tree.setBorder(BorderFactory.createEmptyBorder());
 		tree.setBackground(Theme.GetColor("panel-background"));
 		

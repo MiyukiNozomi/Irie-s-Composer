@@ -14,6 +14,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.UIManager;
+import javax.swing.plaf.ColorUIResource;
 
 import com.miyuki.baddapple.ui.ConsolePanel;
 import com.miyuki.baddapple.ui.TabPanel;
@@ -125,6 +126,12 @@ public class BadApple extends JFrame {
 		UIManager.put("Menu.font", menuFont);
 		UIManager.put("MenuItem.font", menuFont);
 		UIManager.put("PopupMenu.border", BorderFactory.createEmptyBorder());
+		
+		UIManager.put("Tree.paintLines", false);
+		 
+		UIManager.put("Tree.dropLineColor", new ColorUIResource(Theme.GetColor("panel-background")));
+		UIManager.put("Tree.expandedIcon",  Resource.GetImageRecolored("extended.png", Theme.GetColor("explorer-colapse-extend-button")));
+		UIManager.put("Tree.collapsedIcon", Resource.GetImageRecolored("colapsed.png", Theme.GetColor("explorer-colapse-extend-button")));
 		
 		BadApple badApple = new BadApple();
 		

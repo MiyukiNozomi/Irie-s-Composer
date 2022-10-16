@@ -109,5 +109,7 @@ public class Theme {
 		
 		"scroller-background",
 		"scroller-foreground",
+		
+		"explorer-colapse-extend-button",
 	};
 }
