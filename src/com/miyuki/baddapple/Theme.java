@@ -1,7 +1,11 @@
 package com.miyuki.baddapple;
 
 import java.awt.Color;
+import java.io.File;
+import java.io.FileFilter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.management.RuntimeErrorException;
 
@@ -11,7 +15,8 @@ import org.json.simple.JSONValue;
 public class Theme {
 	
 	public static Theme current;
-	public static HashMap<String, Theme> loadedThemes;
+	public static List<String> loadedThemes = new ArrayList<String>();
+	public static File themeFolder = new File("themes");
 	
 	public HashMap<String, Color> colors;
 
@@ -56,12 +61,25 @@ public class Theme {
 	}
 	
 	public static void LoadThemes() {
-		loadedThemes = new HashMap<String, Theme>();
+		if (!themeFolder.exists() || !themeFolder.isDirectory()) {
+			themeFolder.mkdir();
+		}
+
+		File[] files = themeFolder.listFiles(new FileFilter() {
+			
+			@Override
+			public boolean accept(File pathname) {
+				return pathname.isFile() && pathname.getName().endsWith(".json");
+			}
+		});
 		
-		loadedThemes.put("default", new Theme("defaultTheme.json"));
+		for (File f : files) {
+			loadedThemes.add(f.getName());
+		}
 		
+		System.out.println("Loaded " + loadedThemes.size() + " Themes.");
 		//TODO save user's current theme.
-		current = loadedThemes.get("default");
+		current = new Theme("internal://defaultTheme.json");
 	}
 	
 	public static final String[] RequiredGeneralColorKeys = {
@@ -110,6 +128,8 @@ public class Theme {
 		"scroller-background",
 		"scroller-foreground",
 		
+		"explorer-selected-foreground",
+		"explorer-selected-background",
 		"explorer-colapse-extend-button",
 	};
 }

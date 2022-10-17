@@ -4,9 +4,13 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 
@@ -28,7 +32,7 @@ public class Resource {
 	
 	public static Font LoadFont(String name) {
 		try {
-			return Font.createFont(Font.TRUETYPE_FONT, GetResourceAsStream("fonts/" + name));
+			return Font.createFont(Font.TRUETYPE_FONT, GetResourceAsStream("internal://fonts/" + name));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -42,7 +46,7 @@ public class Resource {
 		String ln;
 		try {
 			while ((ln = reader.readLine()) != null) {
-				builder.append(ln);
+				builder.append(ln+"\n");
 			}
 			return builder.toString();
 		} catch (IOException e) {
@@ -98,10 +102,32 @@ public class Resource {
 	}
 	
 	public static InputStream GetResourceAsStream(String resource) {
-		return Resource.class.getResourceAsStream("/assets/badapple/" + resource);
+		if (resource.contains("internal://")) {
+			System.out.println("Opening Internal File: " + resource);
+			String target = resource.replace("internal://", "");
+			return Resource.class.getResourceAsStream("/assets/badapple/" + target);
+		} else {
+			try {
+				System.out.println("Opening External File: " + resource);
+				return new FileInputStream(new File(resource));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
 	}
 	
 	public static URL GetResource(String resource) {
-		return Resource.class.getResource("/assets/badapple/" + resource);
+		if (resource.contains("internal://")) {
+			String target = resource.replace("internal://", "");
+			return Resource.class.getResource("/assets/badapple/" + target);
+		} else {
+			try {
+				return new URL("file://" + resource);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
 	}
 }

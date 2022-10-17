@@ -30,12 +30,12 @@ public class BadApple extends JFrame {
 	public static BadApple Get;
 
 	public Tray sideTray;
+	public TabPanel tabPanel;
 	public JSplitPane mainSplitPanel;
 	
 	JPanel contentPanel;
 	
 	JMenuBar menuBar;
-	TabPanel tabPanel;
 	ConsolePanel consolePanel;
 	FileExplorerView fileExplorerView;
 	
@@ -82,7 +82,7 @@ public class BadApple extends JFrame {
 		DiscordPresence.Init();
 	}
 	
-	public void MakeMenus() {
+	public void MakeMenus() { 
 		JMenu mnFile = new JMenu("File");
 		
 		JMenuItem mnOpenFolder = new JMenuItem("Open Folder");
@@ -106,6 +106,7 @@ public class BadApple extends JFrame {
 	
 	public static void main(String[] args) {
 		Theme.LoadThemes();
+		IconPack.LoadIconPacks();
 		
 		UIManager.put("MenuItem.selectionBackground", Theme.GetColor("menubar-selected-background"));
 		UIManager.put("MenuItem.selectionForeground", Theme.GetColor("menubar-selected-foreground"));
@@ -130,8 +131,8 @@ public class BadApple extends JFrame {
 		UIManager.put("Tree.paintLines", false);
 		 
 		UIManager.put("Tree.dropLineColor", new ColorUIResource(Theme.GetColor("panel-background")));
-		UIManager.put("Tree.expandedIcon",  Resource.GetImageRecolored("extended.png", Theme.GetColor("explorer-colapse-extend-button")));
-		UIManager.put("Tree.collapsedIcon", Resource.GetImageRecolored("colapsed.png", Theme.GetColor("explorer-colapse-extend-button")));
+		UIManager.put("Tree.expandedIcon",  Resource.GetImageRecolored("internal://extended.png", Theme.GetColor("explorer-colapse-extend-button")));
+		UIManager.put("Tree.collapsedIcon", Resource.GetImageRecolored("internal://colapsed.png", Theme.GetColor("explorer-colapse-extend-button")));
 		
 		BadApple badApple = new BadApple();
 		

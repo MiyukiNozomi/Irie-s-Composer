@@ -14,7 +14,7 @@ import com.miyuki.baddapple.editor.Editor;
 public class TabPanel extends JPanel {
 	private static final long serialVersionUID = 688529252359L;
 	
-	private JTabbedPane tabbedPanel;
+	public JTabbedPane tabbedPanel;
 	
 	public TabPanel() {
 		setLayout(new BorderLayout());

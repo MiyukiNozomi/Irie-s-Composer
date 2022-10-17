@@ -48,7 +48,7 @@ public class Tray extends JPanel {
 		badAppleButton.setMinimumSize(new Dimension(48,48));
 		badAppleButton.setPreferredSize(new Dimension(48,48));
 		badAppleButton.setHorizontalAlignment(SwingConstants.CENTER);
-		badAppleButton.setIcon(Resource.Resize(Resource.GetImageRecolored("tray/whiteicon.png", Theme.GetColor("tray-foreground")), 32));
+		badAppleButton.setIcon(Resource.Resize(Resource.GetImageRecolored("internal://tray/whiteicon.png", Theme.GetColor("tray-foreground")), 32));
 		add(badAppleButton, BorderLayout.SOUTH);
 	}
 	

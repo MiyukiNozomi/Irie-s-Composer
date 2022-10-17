@@ -47,6 +47,8 @@
 		"scroller-foreground": "28293A",
 		"scroller-background": "1A1B26",
 		
+		"explorer-selected-background": "1C1D29",
+		"explorer-selected-foreground": "A9B1D6",
 		"explorer-colapse-extend-button": "6F675E"
 	}
 }

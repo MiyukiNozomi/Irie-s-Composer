@@ -12,7 +12,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
-import com.miyuki.baddapple.Resource;
+import com.miyuki.baddapple.IconPack;
 import com.miyuki.baddapple.Theme;
 
 public class UITabbedPane extends JTabbedPane {
@@ -26,7 +26,7 @@ public class UITabbedPane extends JTabbedPane {
 
 	@Override
 	public void addTab(String title, Component component) {
-		this.addTab(title, Resource.GetImage("file-16x16.png"), component);
+		this.addTab(title, IconPack.current.fileIcon, component);
 	}
 
 	@Override

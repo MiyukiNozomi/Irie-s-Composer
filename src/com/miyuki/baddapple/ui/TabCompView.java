@@ -48,7 +48,7 @@ public class TabCompView extends JPanel {
 			}
 		});
 		add(titleLbl, BorderLayout.WEST);
-		closeButton = new JLabel(Resource.GetImage("delete.png"));
+		closeButton = new JLabel(Resource.GetImage("internal://delete.png"));
 		closeButton.setHorizontalAlignment(JLabel.CENTER);
 		closeButton.setVerticalAlignment(JLabel.CENTER);
 		closeButton.setFont(new Font("Dialog",Font.BOLD,14));

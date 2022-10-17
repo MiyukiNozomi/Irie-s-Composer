@@ -1,0 +1,9 @@
+{
+	"file": "internal://file-16x16.png",
+	"folder": "internal://folder-16x16.png",
+	
+	"extensions": {
+		"xml": "internal://xml.png",
+		"html": "internal://xml.png"
+	}
+}
