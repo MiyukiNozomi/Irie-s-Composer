@@ -8,8 +8,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.Theme;
-import com.miyuki.baddapple.editor.Editor;
+import com.miyuki.baddapple.WelcomePage;
 
 public class TabPanel extends JPanel {
 	private static final long serialVersionUID = 688529252359L;
@@ -42,7 +43,7 @@ public class TabPanel extends JPanel {
 			}
 		});
 		
-		tabbedPanel.add("Test", new Editor());
+		tabbedPanel.addTab("WelcomePage", Resource.GetImage("internal://tray/whiteicon.png"), new WelcomePage());
 		add(tabbedPanel, BorderLayout.CENTER);
 	}
 }

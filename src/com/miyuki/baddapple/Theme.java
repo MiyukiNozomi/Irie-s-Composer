@@ -14,11 +14,15 @@ import org.json.simple.JSONValue;
 
 public class Theme {
 	
-	public static Theme current;
+	public static Theme current = new Theme();
 	public static List<String> loadedThemes = new ArrayList<String>();
 	public static File themeFolder = new File("themes");
 	
 	public HashMap<String, Color> colors;
+	
+	public Theme() {
+		colors = new HashMap<String, Color>();
+	}
 
 	public Theme(String filename) {
 		this(Resource.GetFile(filename), filename);
@@ -69,7 +73,7 @@ public class Theme {
 			
 			@Override
 			public boolean accept(File pathname) {
-				return pathname.isFile() && pathname.getName().endsWith(".json");
+				return pathname.isFile() && pathname.getName().toLowerCase().endsWith(".json");
 			}
 		});
 		
@@ -89,6 +93,7 @@ public class Theme {
 		"panel-foreground",
 		"panel-background",
 		"panel-border",
+		"panel-selection",
 		
 		"menubar-background",
 		"menubar-border",
@@ -118,6 +123,7 @@ public class Theme {
 		"editor-foreground",
 		"editor-background",
 		"editor-caret",
+		"editor-selection",
 		
 		"editor-current-line",
 		

@@ -6,6 +6,7 @@
 		"panel-background": "16161E",
 		"panel-foreground": "BCC6EF",
 		"panel-border":     "101014",
+		"panel-selection":  "3D59A1",
 		
 		"menubar-background": "16161E",
 		"menubar-border":     "101014",
@@ -36,7 +37,8 @@
 		
 		"editor-background": "1A1B26",
 		"editor-foreground": "ACB4DC",
-		"editor-caret": "ACB4DC",
+		"editor-caret":     "ACB4DC",
+		"editor-selection": "272B3C",
 		
 		"line-numbers-background": "1A1B26",
 		"line-numbers-foreground": "293B54",

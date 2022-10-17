@@ -17,6 +17,8 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import com.miyuki.baddapple.ui.Pixels;
+
 public class Resource {
 	
 	public static Font mainFont = LoadFont("yaheiui.ttf");
@@ -86,8 +88,7 @@ public class Resource {
 			for (int j = 0; j < src.getHeight();j++) {
 				for (int i = 0; i < src.getWidth(); i++) {
 					byte originalAlpha = ((byte)(src.getRGB(i, j) >>> 24));
-					Color c = new Color(color.getRed(), color.getGreen(), color.getBlue(), originalAlpha & 0xFF);
-					src.setRGB(i, j, c.getRGB());
+					src.setRGB(i, j, Pixels.encodeInt(color.getRed(), color.getGreen(), color.getBlue(), originalAlpha & 0xFF));
 				}	
 			}
 			

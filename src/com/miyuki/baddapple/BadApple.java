@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
@@ -16,6 +18,7 @@ import javax.swing.JSplitPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
 
+import com.miyuki.baddapple.modules.ModuleHandler;
 import com.miyuki.baddapple.ui.ConsolePanel;
 import com.miyuki.baddapple.ui.TabPanel;
 import com.miyuki.baddapple.ui.Tray;
@@ -23,12 +26,14 @@ import com.miyuki.baddapple.ui.UIHelper;
 import com.miyuki.baddapple.ui.UIMenuBar;
 import com.miyuki.baddapple.views.ModulesView;
 import com.miyuki.baddapple.views.explorer.FileExplorerView;
+import java.awt.Toolkit;
 
 public class BadApple extends JFrame {
 	private static final long serialVersionUID = 1345151351515L;
 	
 	public static BadApple Get;
-
+	
+	public ModuleHandler handler;
 	public Tray sideTray;
 	public TabPanel tabPanel;
 	public JSplitPane mainSplitPanel;
@@ -44,6 +49,15 @@ public class BadApple extends JFrame {
 		
 		BadApple.Get = this;
 		
+		handler = new ModuleHandler();
+		handler.Initialize();
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				handler.OnDisable();
+			}
+		});
+		
 		menuBar = new UIMenuBar();
 		MakeMenus();
 		setJMenuBar(menuBar);
@@ -53,10 +67,11 @@ public class BadApple extends JFrame {
 		contentPanel.setLayout(new BorderLayout());
 		
 		setContentPane(contentPanel);
-		
 		setSize(400, 400);
 		
-		setIconImage(Resource.GetImage("icon.png").getImage());
+		//Resource.GetImage() sometimes doesn't works with this function
+		//i'm not sure why, so i'll just do it in the "legacy" way
+		setIconImage(Toolkit.getDefaultToolkit().getImage(BadApple.class.getResource("/assets/badapple/icons/icon.png")));
 		
 		mainSplitPanel = UIHelper.ManufactureSplit(JSplitPane.HORIZONTAL_SPLIT);
 		JSplitPane editorCmdSplit = UIHelper.ManufactureSplit(JSplitPane.VERTICAL_SPLIT);
@@ -76,7 +91,6 @@ public class BadApple extends JFrame {
 		
 		sideTray = new Tray();
 		sideTray.AddTrayIcon(fileExplorerView).SetSelected(true);
-		sideTray.AddTrayIcon(new ModulesView());
 		contentPanel.add(sideTray, BorderLayout.WEST);
 		
 		DiscordPresence.Init();
@@ -122,6 +136,7 @@ public class BadApple extends JFrame {
 
 		UIManager.put("Panel.background", Theme.GetColor("panel-background"));
 		UIManager.put("Panel.foreground", Theme.GetColor("panel-foreground"));
+		UIManager.put("Label.foreground", Theme.GetColor("panel-foreground"));
 		
 		Font menuFont = Resource.DeriveMainFont(Font.PLAIN, 12);
 		UIManager.put("Menu.font", menuFont);
@@ -139,6 +154,10 @@ public class BadApple extends JFrame {
 		badApple.setSize(800,600);
 		badApple.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		badApple.setLocationRelativeTo(null);
+		
+		badApple.handler.OnEnable();
+		badApple.sideTray.AddTrayIcon(new ModulesView());
+		
 		badApple.setVisible(true);
 	}
 }

@@ -69,7 +69,7 @@ public class IconPack {
 			
 			@Override
 			public boolean accept(File pathname) {
-				return pathname.isFile() && pathname.getName().endsWith(".json");
+				return pathname.isFile() && pathname.getName().toLowerCase().endsWith(".json");
 			}
 		});
 		

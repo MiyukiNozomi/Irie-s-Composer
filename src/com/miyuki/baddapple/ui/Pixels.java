@@ -4,6 +4,8 @@ package com.miyuki.baddapple.ui;
 /**
  *
  * @author Cien
+ * 
+ * modified to use ARGB instead of RGBA
  */
 public class Pixels {
     
@@ -22,11 +24,10 @@ public class Pixels {
     }
     
     public static int encode(byte r, byte g, byte b, byte a) {
-        return ((r & 0xFF) << 24)
-                | ((g & 0xFF) << 16)
-                | ((b & 0xFF) << 8)
-                | ((a & 0xFF) << 0)
-                ;
+        return ((a & 0xFF) << 24)
+                | ((r & 0xFF) << 16)
+                | ((g & 0xFF) << 8)
+                | ((b & 0xFF) << 0);
     }
     
     public static int encode(byte r, byte g, byte b) {
@@ -43,24 +44,24 @@ public class Pixels {
     
     public static byte decode(int pixel, int channel) {
         switch (channel) {
-            case 0: {
+            case 3: {
                 return (byte) (pixel >>> 24);
             }
-            case 1: {
+            case 2: {
                 return (byte) (pixel >>> 16);
             }
-            case 2: {
+            case 1: {
                 return (byte) (pixel >>> 8);
             }
-            case 3: {
+            case 0: {
                 return (byte) (pixel >>> 0);
             }
             default: throw new IllegalArgumentException("Invalid channel index "+channel+" must be 0-3");
         }
     }
     
-    public static int encodeNormalized(float r, float g, float b, float a) {
-        return encode(floatToByte(r), floatToByte(g), floatToByte(b), floatToByte(a));
+    public static int encodeNormalized(float a, float r, float g, float b) {
+        return encode(floatToByte(a), floatToByte(r), floatToByte(g), floatToByte(b));
     }
     
     public static int encodeNormalized(float r, float g, float b) {
@@ -79,8 +80,8 @@ public class Pixels {
         return byteToFloat(decode(pixel, channel));
     }
     
-    public static int encodeInt(int r, int g, int b, int a) {
-        return encode((byte) r, (byte) g, (byte) b, (byte) a);
+    public static int encodeInt(int a, int r, int g, int b) {
+        return encode((byte) a, (byte) r, (byte) g, (byte) b);
     }
     
     public static int encodeInt(int r, int g, int b) {

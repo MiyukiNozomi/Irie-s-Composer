@@ -27,10 +27,12 @@ public class Editor extends JPanel {
 	public LinePainter linePainter;
 
 	public Editor() {
-		document = new JTextPane();
+		document = new NoWrapJTextPane();
 		document.setBorder(BorderFactory.createEmptyBorder());
 		document.setFont(Resource.editorFont);
 		document.setEditorKit(new BaseEditorKit());
+		document.setSelectionColor(Theme.GetColor("editor-selection"));
+		document.setSelectedTextColor(Theme.GetColor("editor-foreground"));
 		document.setCaretColor(Theme.GetColor("editor-caret"));
 		document.setForeground(Theme.GetColor("editor-foreground"));
 		document.setBackground(Theme.GetColor("editor-background"));
