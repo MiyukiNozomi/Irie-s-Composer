@@ -37,6 +37,7 @@ public class BadApple extends JFrame {
 	public Tray sideTray;
 	public TabPanel tabPanel;
 	public JSplitPane mainSplitPanel;
+	public Settings settings;
 	
 	JPanel contentPanel;
 	
@@ -44,9 +45,9 @@ public class BadApple extends JFrame {
 	ConsolePanel consolePanel;
 	FileExplorerView fileExplorerView;
 	
-	BadApple() {
+	BadApple(Settings settings) {
 		super("BadApple Studio");
-		
+		this.settings = settings;
 		BadApple.Get = this;
 		
 		handler = new ModuleHandler();
@@ -54,6 +55,7 @@ public class BadApple extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
+				settings.SaveSettings();
 				handler.OnDisable();
 			}
 		});
@@ -107,6 +109,7 @@ public class BadApple extends JFrame {
 				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				
 				if (chooser.showOpenDialog(BadApple.this) == JFileChooser.APPROVE_OPTION) {
+					settings.AddWorkspace(chooser.getSelectedFile().getPath());
 					fileExplorerView.OnFolderOpeningRequest(chooser.getSelectedFile());
 				}
 			}
@@ -119,6 +122,12 @@ public class BadApple extends JFrame {
 	}
 	
 	public static void main(String[] args) {
+		StandardOut.CaptureSTD();
+		System.setOut(new StandardOut(System.out,"INFO"));
+		System.setErr(new StandardOut(System.err,"ERROR"));
+		Settings settings = new Settings();
+		Theme.current = new Theme(settings.theme);
+
 		Theme.LoadThemes();
 		IconPack.LoadIconPacks();
 		
@@ -149,12 +158,13 @@ public class BadApple extends JFrame {
 		UIManager.put("Tree.expandedIcon",  Resource.GetImageRecolored("internal://extended.png", Theme.GetColor("explorer-colapse-extend-button")));
 		UIManager.put("Tree.collapsedIcon", Resource.GetImageRecolored("internal://colapsed.png", Theme.GetColor("explorer-colapse-extend-button")));
 		
-		BadApple badApple = new BadApple();
+		BadApple badApple = new BadApple(settings);
 		
 		badApple.setSize(800,600);
 		badApple.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		badApple.setLocationRelativeTo(null);
-		
+		badApple.tabPanel.tabbedPanel.addTab("WelcomePage", Resource.GetImage("internal://tray/whiteicon.png"), new WelcomePage());
+			
 		badApple.handler.OnEnable();
 		badApple.sideTray.AddTrayIcon(new ModulesView());
 		

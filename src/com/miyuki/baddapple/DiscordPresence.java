@@ -32,6 +32,15 @@ public class DiscordPresence {
 		presence.smallImageText = "https://miyukinozomi.github.io/wiki";
 		presence.largeImageKey = "icon";
 		presence.startTimestamp = System.currentTimeMillis() / 1000;
+		
+		Reset();
+
+		failed = false;
+		return true;
+	}
+	
+	@SuppressWarnings("static-access")
+	public static final void Reset() {
 		String state = "Huh, Discord RPC doesn't supports Hiragana lol"; //なにですか
 
 		switch (new Random().nextInt(10)) {
@@ -69,26 +78,13 @@ public class DiscordPresence {
 
 		presence.state = state;
 		rpc.discordUpdatePresence(presence);
-
-		failed = false;
-		return true;
 	}
 
 	@SuppressWarnings("static-access")
-	public static final void setCurrentFile(File editor) {
+	public static final void SetCurrentFile(File editor) {
 		if (failed)
 			return;
-/*
-		if (editor == null) {
-			presence.state = "Welcome Page :D";
-		} else {
-			if (editor.getFile() != null)
-				presence.state = "Editing " + editor.getName();
-			else
-				presence.state = "Editing in a Comment Editor.";
-		}
-		presence.details = "Version: Pulsepad-" + System.getProperty("os.name").replace(" ", "-");
-*/
+		presence.state = "Editing " + editor.getName();
 		rpc.discordUpdatePresence(presence);
 	}
 }

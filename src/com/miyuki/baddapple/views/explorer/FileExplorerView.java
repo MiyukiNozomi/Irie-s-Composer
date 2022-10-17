@@ -19,6 +19,7 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import com.miyuki.baddapple.BadApple;
+import com.miyuki.baddapple.DiscordPresence;
 import com.miyuki.baddapple.IconPack;
 import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.Theme;
@@ -82,7 +83,8 @@ public class FileExplorerView extends View {
 						icn = IconPack.current.fileIcon;
 					}
 					BadApple.Get.tabPanel.tabbedPanel.addTab(f.getName(), icn, editor);
-					editor.openFile(f);
+					editor.OpenFile(f);
+					DiscordPresence.SetCurrentFile(f);
 				}
 			}
 		});

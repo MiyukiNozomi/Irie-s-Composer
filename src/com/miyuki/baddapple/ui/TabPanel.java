@@ -1,6 +1,7 @@
 package com.miyuki.baddapple.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -8,9 +9,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.miyuki.baddapple.Resource;
+import com.miyuki.baddapple.DiscordPresence;
 import com.miyuki.baddapple.Theme;
-import com.miyuki.baddapple.WelcomePage;
+import com.miyuki.baddapple.editor.Editor;
 
 public class TabPanel extends JPanel {
 	private static final long serialVersionUID = 688529252359L;
@@ -40,10 +41,25 @@ public class TabPanel extends JPanel {
 				}
 
 				((TabCompView) tabbedPanel.getTabComponentAt(saveI)).onShown();
+				
+				Component c = tabbedPanel.getComponentAt(saveI);
+				if (c instanceof Editor) {
+					DiscordPresence.SetCurrentFile(((Editor) c).targetFile);
+				} else {
+					DiscordPresence.Reset();
+				}
 			}
 		});
 		
-		tabbedPanel.addTab("WelcomePage", Resource.GetImage("internal://tray/whiteicon.png"), new WelcomePage());
 		add(tabbedPanel, BorderLayout.CENTER);
+	}
+	
+	public void SetTitleAt(Component c, String t) {
+		SetTitleAt(tabbedPanel.indexOfComponent(c), t);
+	}
+	
+	public void SetTitleAt(int i, String title) {
+		((TabCompView) tabbedPanel.getTabComponentAt(i)).titleLbl.setText(title);
+		tabbedPanel.setTitleAt(i, title);
 	}
 }

@@ -1,13 +1,25 @@
 package com.miyuki.baddapple.editor;
 
 import java.awt.BorderLayout;
+import java.awt.Event;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 import javax.swing.text.AbstractDocument;
 
 import com.miyuki.baddapple.BadApple;
@@ -25,9 +37,11 @@ public class Editor extends JPanel {
 	public JScrollPane scrollPane;
 	public LineNumbers lineNumbers;
 	public LinePainter linePainter;
+	public AutoComplete autoComplete;
 
 	public Editor() {
 		document = new NoWrapJTextPane();
+		document.addKeyListener(new AutoClose(document));
 		document.setBorder(BorderFactory.createEmptyBorder());
 		document.setFont(Resource.editorFont);
 		document.setEditorKit(new BaseEditorKit());
@@ -36,6 +50,25 @@ public class Editor extends JPanel {
 		document.setCaretColor(Theme.GetColor("editor-caret"));
 		document.setForeground(Theme.GetColor("editor-foreground"));
 		document.setBackground(Theme.GetColor("editor-background"));
+		
+		autoComplete = new AutoComplete(document);
+		
+		document.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN) {
+					document.repaint();
+					return;
+				}
+				if (e.getKeyCode() != KeyEvent.VK_LEFT && e.getKeyCode() != KeyEvent.VK_RIGHT) {
+					BadApple.Get.tabPanel.SetTitleAt(Editor.this, "*"+targetFile.getName());	
+					String regex = "([^a-zA-Z']+)'*\\1*";
+					String[] split = document.getText().split(regex);
+					List<String> words = Arrays.asList(split);
+			        List<String> withoutDuplicates = words.stream().distinct().collect(Collectors.toList());
+					autoComplete.words = withoutDuplicates;
+				}
+			}
+		});
 		
 		linePainter = new LinePainter(document);
 
@@ -48,9 +81,41 @@ public class Editor extends JPanel {
 
 		setLayout(new BorderLayout());
 		add(scrollPane, BorderLayout.CENTER);
+		
+		DoStrokes();
+	}
+
+
+	private void DoStrokes() {
+		KeyStroke save = KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK);
+
+		document.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(save, "saveKeyStroke");
+		document.getActionMap().put("saveKeyStroke", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SaveFile();
+			}
+		});
 	}
 	
-	public void openFile(File f) {
+	public void SaveFile() {
+		try {
+			if (targetFile == null)
+				return;
+			Files.write(Paths.get(targetFile.getPath()), document.getText().getBytes());
+			System.out.println("Successfully saved file!");
+			// detail.setText("Saved!");
+			//Footer.GetInstance().getLineAndColumnLbl().setText("Saved!");
+			BadApple.Get.tabPanel.SetTitleAt(this, targetFile.getName());
+		} catch (Exception e) {
+			System.err.println("Unable to save file: " + targetFile.getPath());
+			e.printStackTrace();
+		}
+	}
+	
+	public void OpenFile(File f) {
 		this.targetFile = f;
 		
 		document.setText(Resource.GetFile(f.getPath()));

@@ -28,9 +28,9 @@ public class TabCompView extends JPanel {
 		setLayout(new BorderLayout());
 		setMinimumSize(new Dimension(123, 29));
 		setPreferredSize(new Dimension(123, 29));
-		setMaximumSize(new Dimension(123, 29));
+		//setMaximumSize(new Dimension(123, 29));
 		setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
-		titleLbl = new JLabel(title);
+		titleLbl = new JLabel("<html>" +title);
 		titleLbl.setMinimumSize(new Dimension(123, 29));
 		titleLbl.setPreferredSize(new Dimension(123, 29));
 		titleLbl.setIcon(Resource.Resize(icon, 16));

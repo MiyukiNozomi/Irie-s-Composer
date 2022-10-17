@@ -13,6 +13,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 import com.miyuki.baddapple.IconPack;
+import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.Theme;
 
 public class UITabbedPane extends JTabbedPane {
@@ -56,6 +57,8 @@ public class UITabbedPane extends JTabbedPane {
 		public Color selectedBackground;
 		public Color border;
 		public Color selectedBorder;
+		
+		public ImageIcon logo;
 
 		static {
 			Insets insets = UIManager.getInsets("TabbedPane.contentBorderInsets");
@@ -71,6 +74,8 @@ public class UITabbedPane extends JTabbedPane {
 			
 			selectedBackground = Theme.GetColor("tab-selected-background");
 			selectedBorder = Theme.GetColor("tab-selected-border");
+			
+			logo = Resource.Resize(Resource.GetImageRecolored("internal://tray/whiteicon.png", background), 128);
 		}
 
 		protected void installDefaults() {
@@ -93,6 +98,13 @@ public class UITabbedPane extends JTabbedPane {
 				int h) {
 			g.setColor(border);
 			g.fillRect(x - 1, y, w + 1, h);
+			
+			if (selectedIndex == -1) {
+				int lx = w / 2 - logo.getIconWidth() / 2;
+				int ly = h / 2 - logo.getIconHeight() / 2;
+				
+				g.drawImage(logo.getImage(), lx, ly, null);
+			}
 		}
 
 		protected void paintTabBackground(Graphics g, int tabPlacement, int tabIndex, int x, int y, int w, int h,

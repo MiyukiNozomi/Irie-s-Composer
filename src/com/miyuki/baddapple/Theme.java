@@ -19,6 +19,7 @@ public class Theme {
 	public static File themeFolder = new File("themes");
 	
 	public HashMap<String, Color> colors;
+	public String name;
 	
 	public Theme() {
 		colors = new HashMap<String, Color>();
@@ -30,6 +31,7 @@ public class Theme {
 	
 	public Theme(String rawFile, String filename) {
 		colors = new HashMap<String, Color>();
+		this.name = filename;
 		JSONObject rawObject;
 		try {
 			rawObject = (JSONObject) JSONValue.parseWithException(rawFile);
@@ -82,8 +84,6 @@ public class Theme {
 		}
 		
 		System.out.println("Loaded " + loadedThemes.size() + " Themes.");
-		//TODO save user's current theme.
-		current = new Theme("internal://defaultTheme.json");
 	}
 	
 	public static final String[] RequiredGeneralColorKeys = {
