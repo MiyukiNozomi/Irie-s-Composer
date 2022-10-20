@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.miyuki.baddapple.BadApple;
+import com.miyuki.baddapple.Language;
 import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.modules.ModuleSign;
 
@@ -20,7 +21,7 @@ public class ModulesView extends View {
 	Font titleFont = Resource.DeriveMainFont(Font.BOLD, 13);
 	
 	public ModulesView() {
-		super("Modules", "internal://tray/module.png");
+		super(Language.GetKey("module-view-title"), "internal://tray/module.png");
 		content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 		
 		for (ModuleSign sign : BadApple.Get.handler.LoadedModules) {
@@ -28,7 +29,7 @@ public class ModulesView extends View {
 		}
 		
 		if (BadApple.Get.handler.LoadedModules.size() == 0) {
-			JLabel lbl = new JLabel("No Modules have been loaded.");
+			JLabel lbl = new JLabel(Language.GetKey("module-view-zero-loaded"));
 			lbl.setHorizontalAlignment(JLabel.CENTER);
 			lbl.setFont(titleFont);
 			content.add(lbl);

@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,8 +24,10 @@ import javax.swing.KeyStroke;
 import javax.swing.text.AbstractDocument;
 
 import com.miyuki.baddapple.BadApple;
+import com.miyuki.baddapple.Registry;
 import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.Theme;
+import com.miyuki.baddapple.editor.CompletionSuggestion.CompletionType;
 import com.miyuki.baddapple.ui.TabCompView;
 import com.miyuki.baddapple.ui.UIHelper;
 
@@ -42,6 +45,7 @@ public class Editor extends JPanel {
 	public Editor() {
 		document = new NoWrapJTextPane();
 		document.addKeyListener(new AutoClose(document));
+		document.setDocument(new HighlightEngine());
 		document.setBorder(BorderFactory.createEmptyBorder());
 		document.setFont(Resource.editorFont);
 		document.setEditorKit(new BaseEditorKit());
@@ -57,6 +61,8 @@ public class Editor extends JPanel {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN) {
 					document.repaint();
+					if (autoComplete.isShow)
+						e.consume();
 					return;
 				}
 				if (e.getKeyCode() != KeyEvent.VK_LEFT && e.getKeyCode() != KeyEvent.VK_RIGHT) {
@@ -65,7 +71,13 @@ public class Editor extends JPanel {
 					String[] split = document.getText().split(regex);
 					List<String> words = Arrays.asList(split);
 			        List<String> withoutDuplicates = words.stream().distinct().collect(Collectors.toList());
-					autoComplete.words = withoutDuplicates;
+			        List<CompletionSuggestion> suggestions = new ArrayList<>();
+			        
+			        for(String s : withoutDuplicates) {
+			        	suggestions.add(new CompletionSuggestion(CompletionType.Word, s, s));
+			        }
+			        
+					autoComplete.words = suggestions;
 				}
 			}
 		});
@@ -117,6 +129,15 @@ public class Editor extends JPanel {
 	
 	public void OpenFile(File f) {
 		this.targetFile = f;
+		
+		String ext = f.getName();
+		if (ext.indexOf(".") != -1) {
+			ext = ext.substring(ext.indexOf(".") + 1);
+			System.out.println("Its extension is: " + ext);
+			HighlightEngine engine = Registry.GetEngineFor(ext);
+			if (engine != null)
+				document.setDocument(engine);
+		}
 		
 		document.setText(Resource.GetFile(f.getPath()));
 		JTabbedPane p = BadApple.Get.tabPanel.tabbedPanel;

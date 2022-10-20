@@ -19,13 +19,13 @@ public class WelcomePage extends JPanel {
 	public WelcomePage() {
 		Font size13 = Resource.DeriveMainFont(Font.PLAIN, 13);
 
-		JLabel title = new JLabel("Welcome to BadApple Studio");
+		JLabel title = new JLabel(Language.GetKey("welcome-title"));
 		title.setFont(Resource.DeriveMainFont(Font.PLAIN, 22));
 
-		JLabel lblNewLabel = new JLabel("check out https://miyukinozomi.github.io/wiki/projects.html");
+		JLabel lblNewLabel = new JLabel(Language.GetKey("welcome-lower"));
 		lblNewLabel.setFont(size13);
 
-		JLabel lblNewLabel_1 = new JLabel("Previous Projects");
+		JLabel lblNewLabel_1 = new JLabel(Language.GetKey("welcome-prev"));
 		lblNewLabel_1.setFont(size13);
 
 		JPanel panel = new JPanel();
@@ -63,7 +63,7 @@ public class WelcomePage extends JPanel {
 			projLabel.setFont(p);
 			projLabel.setForeground(Theme.GetColor("panel-selection"));
 			panel.add(projLabel);
-			setLayout(groupLayout);
 		}
+		setLayout(groupLayout);
 	}
 }

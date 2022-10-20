@@ -13,7 +13,6 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
@@ -21,6 +20,7 @@ import javax.swing.tree.TreePath;
 import com.miyuki.baddapple.BadApple;
 import com.miyuki.baddapple.DiscordPresence;
 import com.miyuki.baddapple.IconPack;
+import com.miyuki.baddapple.Language;
 import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.Theme;
 import com.miyuki.baddapple.editor.Editor;
@@ -36,18 +36,18 @@ public class FileExplorerView extends View {
 	public File currentFile;
 	public JScrollPane scrollPane;
 
-	private DefaultTreeModel treeModel;
-	private DefaultMutableTreeNode root;
+	public DefaultTreeModel treeModel;
+	public ExplorerTreeNode root;
 
 	public Font childFont;
 
 	public FileExplorerView() {
-		super("File Explorer", "internal://tray/explorer.png");
+		super(Language.GetKey("file-explorer-title"), "internal://tray/explorer.png");
 		setPreferredSize(new Dimension(256, 0));
 
 		childFont = Resource.DeriveMainFont(Font.PLAIN, 13);
 
-		tree = new JTree(new DefaultMutableTreeNode("No Folder Opened!"));
+		tree = new JTree(new ExplorerTreeNode(Language.GetKey("file-explorer-none-opened")));
 		tree.setUI(new UITree());
 		tree.setBorder(BorderFactory.createEmptyBorder());
 		tree.setBackground(Theme.GetColor("panel-background"));
@@ -55,13 +55,17 @@ public class FileExplorerView extends View {
 		tree.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON3) {
+					new ExplorerPopup(FileExplorerView.this).show(tree, e.getX(), e.getY());
+					;
+				}
 				if (e.getClickCount() == 2 && !e.isConsumed()) {
 					e.consume();
 					TreePath scl = tree.getSelectionPath();
 					if (scl == null)
 						return;
 
-					DefaultMutableTreeNode node = (DefaultMutableTreeNode) scl.getLastPathComponent();
+					ExplorerTreeNode node = (ExplorerTreeNode) scl.getLastPathComponent();
 					Object obj = node.getUserObject();
 
 					if (!(obj instanceof File)) {
@@ -94,9 +98,10 @@ public class FileExplorerView extends View {
 			public Component getTreeCellRendererComponent(JTree tree, Object raw, boolean selected, boolean expanded,
 					boolean leaf, int row, boolean hasFocus) {
 				JLabel label = new JLabel();
+				label.setOpaque(true);
 				label.setFont(childFont);
 
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) raw;
+				ExplorerTreeNode node = (ExplorerTreeNode) raw;
 				Object value = node.getUserObject();
 
 				if (value instanceof String) {
@@ -143,7 +148,7 @@ public class FileExplorerView extends View {
 			}
 		}
 
-		root = new DefaultMutableTreeNode(f);
+		root = new ExplorerTreeNode(f);
 		treeModel = new DefaultTreeModel(root);
 		tree.setModel(treeModel);
 		CreateChildNodes ccn = new CreateChildNodes(f, root);
@@ -152,4 +157,19 @@ public class FileExplorerView extends View {
 
 		this.currentFile = f;
 	}
+
+	public void RecursiveDelete(File targetDirectory) {
+		System.out.println("Deleting: " + targetDirectory.getPath());
+        File[] data = targetDirectory.listFiles();
+
+        for (File file : data) {
+            if(file.isDirectory())
+            	RecursiveDelete(file);
+
+            else
+                file.delete();
+        }
+
+        targetDirectory.delete();
+    }
 }

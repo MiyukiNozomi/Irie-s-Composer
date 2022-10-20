@@ -118,6 +118,9 @@ public class LinePainter implements Highlighter.HighlightPainter,
 
 					// Remove the highlighting from the previously highlighted
 					// line
+					
+					if (currentView == null)
+						return;
 
 					if (lastView.y != currentView.y) {
 						component.repaint(0, lastView.y, component.getWidth(),

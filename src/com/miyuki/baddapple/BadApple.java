@@ -1,13 +1,12 @@
 package com.miyuki.baddapple;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -15,8 +14,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.UIManager;
-import javax.swing.plaf.ColorUIResource;
 
 import com.miyuki.baddapple.modules.ModuleHandler;
 import com.miyuki.baddapple.ui.ConsolePanel;
@@ -26,7 +23,6 @@ import com.miyuki.baddapple.ui.UIHelper;
 import com.miyuki.baddapple.ui.UIMenuBar;
 import com.miyuki.baddapple.views.ModulesView;
 import com.miyuki.baddapple.views.explorer.FileExplorerView;
-import java.awt.Toolkit;
 
 public class BadApple extends JFrame {
 	private static final long serialVersionUID = 1345151351515L;
@@ -99,9 +95,9 @@ public class BadApple extends JFrame {
 	}
 	
 	public void MakeMenus() { 
-		JMenu mnFile = new JMenu("File");
+		JMenu mnFile = new JMenu(Language.GetKey("menu-file"));
 		
-		JMenuItem mnOpenFolder = new JMenuItem("Open Folder");
+		JMenuItem mnOpenFolder = new JMenuItem(Language.GetKey("menu-file-open"));
 		mnOpenFolder.addActionListener(new ActionListener() {	
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -117,7 +113,15 @@ public class BadApple extends JFrame {
 		mnFile.add(mnOpenFolder);
 		menuBar.add(mnFile);
 		
-		JMenu mnEdit = new JMenu("Edit");
+		JMenu mnEdit = new JMenu(Language.GetKey("menu-edit"));
+		JMenuItem mnShowWelcome = new JMenuItem(Language.GetKey("menu-edit-show-welcome"));
+		mnShowWelcome.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				tabPanel.tabbedPanel.addTab(Language.GetKey("welcome-tab-title"), Resource.GetImage("internal://tray/whiteicon.png"), new WelcomePage());
+			}
+		});
+		mnEdit.add(mnShowWelcome);
 		menuBar.add(mnEdit);	
 	}
 	
@@ -127,43 +131,19 @@ public class BadApple extends JFrame {
 		System.setErr(new StandardOut(System.err,"ERROR"));
 		Settings settings = new Settings();
 		Theme.current = new Theme(settings.theme);
+		Language.LoadLanguagePack(settings.language);
 
 		Theme.LoadThemes();
 		IconPack.LoadIconPacks();
 		
-		UIManager.put("MenuItem.selectionBackground", Theme.GetColor("menubar-selected-background"));
-		UIManager.put("MenuItem.selectionForeground", Theme.GetColor("menubar-selected-foreground"));
-		UIManager.put("MenuItem.background", Theme.GetColor("menubar-background"));
-		UIManager.put("MenuItem.foreground", Theme.GetColor("menubar-foreground"));
-		UIManager.put("MenuItem.border", BorderFactory.createEmptyBorder());
-		
-		UIManager.put("Menu.selectionBackground", Theme.GetColor("menubar-selected-background"));
-		UIManager.put("Menu.selectionForeground", Theme.GetColor("menubar-selected-foreground"));
-		UIManager.put("Menu.background", Theme.GetColor("menubar-background"));
-		UIManager.put("Menu.foreground", Theme.GetColor("menubar-foreground"));
-		UIManager.put("Menu.border", BorderFactory.createEmptyBorder());
-
-		UIManager.put("Panel.background", Theme.GetColor("panel-background"));
-		UIManager.put("Panel.foreground", Theme.GetColor("panel-foreground"));
-		UIManager.put("Label.foreground", Theme.GetColor("panel-foreground"));
-		
-		Font menuFont = Resource.DeriveMainFont(Font.PLAIN, 12);
-		UIManager.put("Menu.font", menuFont);
-		UIManager.put("MenuItem.font", menuFont);
-		UIManager.put("PopupMenu.border", BorderFactory.createEmptyBorder());
-		
-		UIManager.put("Tree.paintLines", false);
-		 
-		UIManager.put("Tree.dropLineColor", new ColorUIResource(Theme.GetColor("panel-background")));
-		UIManager.put("Tree.expandedIcon",  Resource.GetImageRecolored("internal://extended.png", Theme.GetColor("explorer-colapse-extend-button")));
-		UIManager.put("Tree.collapsedIcon", Resource.GetImageRecolored("internal://colapsed.png", Theme.GetColor("explorer-colapse-extend-button")));
+		UIHelper.InstallLAF();
 		
 		BadApple badApple = new BadApple(settings);
 		
 		badApple.setSize(800,600);
 		badApple.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		badApple.setLocationRelativeTo(null);
-		badApple.tabPanel.tabbedPanel.addTab("WelcomePage", Resource.GetImage("internal://tray/whiteicon.png"), new WelcomePage());
+		badApple.tabPanel.tabbedPanel.addTab(Language.GetKey("welcome-tab-title"), Resource.GetImage("internal://tray/whiteicon.png"), new WelcomePage());
 			
 		badApple.handler.OnEnable();
 		badApple.sideTray.AddTrayIcon(new ModulesView());

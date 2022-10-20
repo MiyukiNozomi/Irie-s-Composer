@@ -14,6 +14,7 @@ import org.json.simple.JSONValue;
 public class Settings {
 
 	public JSONObject rawSettings;
+	public String language;
 	public String theme;
 	public List<String> lastWorkspaces;
 	
@@ -22,6 +23,7 @@ public class Settings {
 	public Settings() {
 		lastWorkspaces = new ArrayList<String>();
 		theme = "internal://defaultTheme.json";
+		language = "english";
 		
 		if (!SettingsFile.exists() || !SettingsFile.isFile()) {
 			SaveSettings();
@@ -40,6 +42,10 @@ public class Settings {
 			theme = (String)rawSettings.get("theme");
 		}
 		
+		if (rawSettings.containsKey("language")) {
+			language = (String)rawSettings.get("language");
+		}
+		
 		if (rawSettings.containsKey("last-workspaces")) {
 			JSONArray workspaces = (JSONArray) rawSettings.get("last-workspaces");
 			
@@ -55,13 +61,14 @@ public class Settings {
 			
 			writer.write("{\n");
 			writer.write("\t\"theme\":\"" + theme + "\",\n");
+			writer.write("\t\"language\":\"" + language + "\",\n");
 			writer.write("\t\"last-workspaces\": [\n");
 			
 			for (int i = 0; i < lastWorkspaces.size(); i++) {
 				// we only want to store up to 5 workspaces.
 				if (i > 4)
 					break;
-				writer.write("\t\t\"" + lastWorkspaces.get(i) + "\"");
+				writer.write("\t\t\"" + CleanupPath(lastWorkspaces.get(i)) + "\"");
 				if (i + 1 < lastWorkspaces.size()) {
 					writer.write(",");
 				}
@@ -78,7 +85,15 @@ public class Settings {
 		}
 	}
 	
+	String CleanupPath(String k) {
+		String f = k;
+		/*while (f.contains("\\"))
+			f = f.replace("\\", "\\\\");*/
+		return f;
+	}
+	
 	public void AddWorkspace(String f) {
-		lastWorkspaces.add(0, f);
+		if (!lastWorkspaces.contains(f));
+			lastWorkspaces.add(0, f);
 	}
 }

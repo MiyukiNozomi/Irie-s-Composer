@@ -16,8 +16,10 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 import com.miyuki.baddapple.BadApple;
+import com.miyuki.baddapple.Language;
 import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.Theme;
+import com.miyuki.baddapple.ui.settings.SettingsPage;
 import com.miyuki.baddapple.views.View;
 
 public class Tray extends JPanel {
@@ -49,6 +51,13 @@ public class Tray extends JPanel {
 		badAppleButton.setPreferredSize(new Dimension(48,48));
 		badAppleButton.setHorizontalAlignment(SwingConstants.CENTER);
 		badAppleButton.setIcon(Resource.Resize(Resource.GetImageRecolored("internal://tray/whiteicon.png", Theme.GetColor("tray-foreground")), 32));
+		badAppleButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				BadApple.Get.tabPanel.tabbedPanel.addTab(Language.GetKey("settings-title"), Resource.GetImage("internal://tray/whiteicon.png"),
+														 new SettingsPage());
+			}
+		});
 		add(badAppleButton, BorderLayout.SOUTH);
 	}
 	

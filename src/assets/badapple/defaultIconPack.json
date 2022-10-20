@@ -3,7 +3,8 @@
 	"folder": "internal://folder-16x16.png",
 	
 	"extensions": {
-		"xml": "internal://xml.png",
-		"html": "internal://xml.png"
+		"xml": "internal://exts/xml.png",
+		"lua": "internal://exts/lua.png",
+		"html": "internal://exts/xml.png"
 	}
 }

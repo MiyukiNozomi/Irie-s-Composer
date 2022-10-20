@@ -52,5 +52,19 @@
 		"explorer-selected-background": "1C1D29",
 		"explorer-selected-foreground": "A9B1D6",
 		"explorer-colapse-extend-button": "6F675E"
+	},
+	"editor": {
+		"default": {
+			"keyword": "B596EF",
+			"access-modifier": "89DDFF",
+			"datatype": "A98CE0",
+			"symbols": "89DDFF",
+			"block-symbols": "836DB0",
+			"import-path": "E0AF68",
+			"numbers": "FF9E64",
+			"quotes": "9ECE6A",
+			"comments": "444B6A",
+			"function": "7AA2F7"
+		}
 	}
 }

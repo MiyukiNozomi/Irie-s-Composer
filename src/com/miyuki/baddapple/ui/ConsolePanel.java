@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 
+import com.miyuki.baddapple.Language;
 import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.Theme;
 
@@ -30,14 +31,16 @@ public class ConsolePanel extends JPanel {
 		textPane.setBackground(Theme.GetColor("editor-background"));
 		textPane.setEditable(false);
 		
-		tabPanel.tabbedPanel.addTab("Debug Console", Resource.GetImage("internal://console.png"), UIHelper.ManufactureScroll(textPane));
+		textPane.setText("<html>");
+		
+		tabPanel.tabbedPanel.addTab(Language.GetKey("console-view-debug-title"), Resource.GetImage("internal://console.png"), UIHelper.ManufactureScroll(textPane));
 		
 		add(tabPanel);
 	}
 	
 	public void ShowMinimized() {
 		removeAll();
-		maximizeLabel = new JLabel("Pull the handle upwards to reveal the built-in terminal.");
+		maximizeLabel = new JLabel(Language.GetKey("console-view-minimized-title"));
 		maximizeLabel.setFont(Resource.DeriveMainFont(Font.PLAIN, 13));
 		maximizeLabel.setForeground(Theme.GetColor("panel-foreground"));
 		

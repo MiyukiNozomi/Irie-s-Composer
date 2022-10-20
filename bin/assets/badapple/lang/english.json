@@ -1,0 +1,47 @@
+{
+	"lang-name": "English",
+
+	"menu-file": "File",
+	"menu-file-open": "Open Folder",
+	
+	"menu-edit": "Edit",
+	"menu-edit-show-welcome": "Show Welcome",
+	
+	"welcome-tab-title": "Welcome Page",
+	"welcome-title": "Welcome to BadApple Studio",
+	"welcome-lower": "check out https://miyukinozomi.github.io/wiki/projects.html",
+	"welcome-prev": "Previous Projects",
+	
+	"module-view-title": "Modules",
+	"module-view-zero-loaded": "No Modules have been loaded.",
+	
+	"file-explorer-title": "File Explorer",
+	"file-explorer-none-opened": "No Folder Opened!",
+	
+	"file-explorer-popup-newfolder": "New Folder",
+	"file-explorer-popup-newfile": "New File", 
+	"file-explorer-popup-open": "Open",  
+	"file-explorer-popup-showin": "Show in", 
+	"file-explorer-popup-delete": "Delete",
+	"file-explorer-popup-sysexplorer": "System Explorer", 
+	
+	"new-folder-popup-message": "New Folder",
+	"new-folder-popup-fail": "Unable to create folder!",
+	
+	"new-file-popup-message": "New File",
+	"new-file-popup-fail": "Unable to create file!",
+	
+	"console-view-debug-title": "Debug Console",
+	"console-view-minimized-title": "Pull the handle upwards to reveal the built-in terminal.",
+	
+	"settings-title": "Settings",
+	"settings-page-general": "General",
+	
+	"settings-page-ui": "Interface",
+	"settings-page-ui-theme": "Theme",
+	"settings-page-ui-lang": "Language",
+	
+	"settings-page-ui-lower": "Restart BadApple to apply the changes.",
+	
+	"settings-page-select": "Click on an option on the left side."
+}

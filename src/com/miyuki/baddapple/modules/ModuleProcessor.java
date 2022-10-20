@@ -56,7 +56,7 @@ public class ModuleProcessor {
 		}
 		
 		if(main_one == null)
-			throw new IllegalClassFormatException("This is not a valid plugin: " + jar.getName());
+			throw new IllegalClassFormatException("This is not a valid plugin: " + jar.getName() + "\n Missing main class.");
 		return LoadModuleMainClass(main_one,jar);
 	}
 	
