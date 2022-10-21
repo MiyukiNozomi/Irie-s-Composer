@@ -4,12 +4,10 @@ import java.awt.Component;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
-import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 
@@ -55,65 +53,8 @@ public class UIHelper {
 		pane.getVerticalScrollBar().setBorder(BorderFactory.createEmptyBorder());
 		pane.getHorizontalScrollBar().setBorder(BorderFactory.createEmptyBorder());
 
-		pane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
-			@Override
-			protected void configureScrollBarColors() {
-				this.thumbColor = Theme.GetColor("scroller-foreground");
-			}
-
-			@Override
-			protected JButton createIncreaseButton(int orientation) {
-				JButton e = super.createIncreaseButton(orientation);
-
-				e.setBackground(Theme.GetColor("scroller-background"));
-
-				e.setBorder(BorderFactory.createEmptyBorder());
-				e.setIcon(Resource.GetImage("up_arrow.png"));
-
-				return e;
-			}
-
-			@Override
-			protected JButton createDecreaseButton(int orientation) {
-				JButton e = super.createDecreaseButton(orientation);
-
-				e.setBackground(Theme.GetColor("scroller-background"));
-
-				e.setBorder(BorderFactory.createEmptyBorder());
-				e.setIcon(Resource.GetImage("down_arrow.png"));
-				return e;
-			}
-		});
-
-		pane.getHorizontalScrollBar().setUI(new BasicScrollBarUI() {
-			@Override
-			protected void configureScrollBarColors() {
-				this.thumbColor = Theme.GetColor("scroller-foreground");
-			}
-
-			@Override
-			protected JButton createIncreaseButton(int orientation) {
-				JButton e = super.createIncreaseButton(orientation);
-
-				e.setBackground(Theme.GetColor("scroller-background"));
-
-				e.setBorder(BorderFactory.createEmptyBorder());
-				e.setIcon(Resource.GetImage("up_arrow.png"));
-
-				return e;
-			}
-
-			@Override
-			protected JButton createDecreaseButton(int orientation) {
-				JButton e = super.createDecreaseButton(orientation);
-
-				e.setBackground(Theme.GetColor("scroller-background"));
-
-				e.setBorder(BorderFactory.createEmptyBorder());
-				e.setIcon(Resource.GetImage("down_arrow.png"));
-				return e;
-			}
-		});
+		pane.getVerticalScrollBar().setUI(new UIScrollBar());
+		pane.getHorizontalScrollBar().setUI(new UIScrollBar());
 		return pane;
 	}
 
@@ -151,10 +92,74 @@ public class UIHelper {
 		UIManager.put("PopupMenu.border", BorderFactory.createLineBorder(Theme.GetColor("panel-border")));
 		
 		UIManager.put("Tree.paintLines", false);
-		 
+		
 		UIManager.put("Tree.dropLineColor", new ColorUIResource(Theme.GetColor("panel-background")));
 		UIManager.put("Tree.expandedIcon",  Resource.GetImageRecolored("internal://extended.png", Theme.GetColor("explorer-colapse-extend-button")));
 		UIManager.put("Tree.collapsedIcon", Resource.GetImageRecolored("internal://colapsed.png", Theme.GetColor("explorer-colapse-extend-button")));
-	}
+	
+		UIManager.put("OptionPane.background",Theme.GetColor("panel-background"));
+		UIManager.put("OptionPane.foreground",Theme.GetColor("panel-foreground"));
+		UIManager.put("OptionPane.messageForeground",Theme.GetColor("panel-foreground"));
+		UIManager.put("OptionPane.warningDialog.titlePane.foreground",Theme.GetColor("panel-foreground"));
+		UIManager.put("OptionPane.questionDialog.titlePane.foreground",Theme.GetColor("panel-foreground"));
+		UIManager.put("OptionPane.errorDialog.titlePane.foreground",Theme.GetColor("panel-foreground"));
+		UIManager.put("OptionPane.border",BorderFactory.createEmptyBorder(15, 15, 0, 0));
+		UIManager.put("OptionPane.buttonAreaBorder",BorderFactory.createEmptyBorder());
+		
+		UIManager.put("OptionPane.errorIcon", Resource.GetImageRecolored("internal://msg/error.png", Theme.GetColor("error-icon")));
+		UIManager.put("OptionPane.warningIcon", Resource.GetImageRecolored("internal://msg/error.png", Theme.GetColor("warn-icon")));
+		UIManager.put("OptionPane.informationIcon", Resource.GetImageRecolored("internal://msg/info.png", Theme.GetColor("info-icon")));
+		UIManager.put("OptionPane.questionIcon", Resource.GetImageRecolored("internal://msg/question.png", Theme.GetColor("info-icon")));
+		
+		UIManager.put("OptionPane.font", Resource.DeriveMainFont(Font.PLAIN, 14));
+	
+		UIManager.put("Button.focus",Theme.GetColor("panel-background"));
+		UIManager.put("Button.font", Resource.DeriveMainFont(Font.PLAIN, 14));
+		UIManager.put("Button.select",Theme.GetColor("panel-selection"));
+		UIManager.put("Button.background",Theme.GetColor("panel-background"));
+		UIManager.put("Button.foreground",Theme.GetColor("panel-foreground"));
+		UIManager.put("Button.border",BorderFactory.createCompoundBorder(
+				BorderFactory.createLineBorder(Theme.GetColor("panel-border")),
+				BorderFactory.createEmptyBorder(7,11,7,11)));
+		
+		UIManager.put("RootPane.fileChooserDialogBorder", BorderFactory.createLineBorder(Theme.GetColor("panel-border")));
+		
+		UIManager.put("Label.font", Resource.DeriveMainFont(Font.PLAIN, 14));
+			
+		
+		UIManager.put("TextField.border", BorderFactory.createLineBorder(Theme.GetColor("panel-border")));
+		UIManager.put("TextField.font", Resource.DeriveMainFont(Font.PLAIN, 14));
+		UIManager.put("TextField.background", Theme.GetColor("panel-background"));
+		UIManager.put("TextField.foreground", Theme.GetColor("panel-foreground"));
+		UIManager.put("TextField.caretForeground", Theme.GetColor("panel-foreground"));
+		UIManager.put("TextField.selectionBackground", Theme.GetColor("panel-selection"));
+		UIManager.put("TextField.selectionForeground", Theme.GetColor("panel-foreground"));
 
+		UIManager.put("ComboBox.selectionBackground", Theme.GetColor("panel-selection"));
+		UIManager.put("ComboBox.selectionForeground", Theme.GetColor("panel-foreground"));
+		UIManager.put("ComboBox.buttonBackground", Theme.GetColor("panel-background"));
+		UIManager.put("ComboBox.background", Theme.GetColor("panel-background"));
+		UIManager.put("ComboBox.foreground", Theme.GetColor("panel-foreground"));
+		UIManager.put("ComboBox.font", Resource.DeriveMainFont(Font.PLAIN, 14));
+		UIManager.put("ComboBoxUI", "com.miyuki.baddapple.ui.UIComboBox");
+		
+		UIManager.put("FileChooser.newFolderIcon", Resource.GetImageRecolored("internal://new-folder-16x16.png", Theme.GetColor("file-chooser-icons")));
+		UIManager.put("FileChooser.detailsViewIcon", Resource.GetImageRecolored("internal://details-16x16.png", Theme.GetColor("file-chooser-icons")));
+		
+		UIManager.put("FileView.computerIcon", Resource.GetImageRecolored("internal://computer-16x16.png", Theme.GetColor("file-chooser-icons")));
+		UIManager.put("FileView.directoryIcon", Resource.GetImageRecolored("internal://folder-16x16.png", Theme.GetColor("file-chooser-icons")));
+		UIManager.put("FileView.fileIcon", Resource.GetImageRecolored("internal://file-16x16.png", Theme.GetColor("file-chooser-icons")));
+		UIManager.put("FileView.floppyDriveIcon", Resource.GetImageRecolored("internal://floppy-16x16.png", Theme.GetColor("file-chooser-icons")));
+		UIManager.put("FileView.hardDriveIcon", Resource.GetImageRecolored("internal://hdd-16x16.png", Theme.GetColor("file-chooser-icons")));
+
+		UIManager.put("ScrollBar.thumb", Theme.GetColor("scroller-foreground"));
+		UIManager.put("ScrollBar.thumbDarkShadow", Theme.GetColor("scroller-foreground"));
+		UIManager.put("ScrollBar.thumbHighlight", Theme.GetColor("scroller-foreground"));
+		UIManager.put("ScrollBar.thumbShadow", Theme.GetColor("scroller-foreground"));
+		UIManager.put("ScrollBar.foreground", Theme.GetColor("scroller-foreground"));
+		UIManager.put("ScrollBar.background", Theme.GetColor("scroller-background"));
+		UIManager.put("ScrollBar.track", Theme.GetColor("scroller-background"));
+		UIManager.put("ScrollBar.border", BorderFactory.createEmptyBorder());
+		UIManager.put("ScrollBarUI", "com.miyuki.baddapple.ui.UIScrollBar");
+	}
 }

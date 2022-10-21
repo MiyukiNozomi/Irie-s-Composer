@@ -27,15 +27,15 @@ public class Theme {
 	public String name;
 
 	public static Style defaultStyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
-	
+
 	public static final StyleContext context = StyleContext.getDefaultStyleContext();
-	
+
 	public Theme() {
 		colors = new HashMap<String, Color>();
 	}
 
 	public Theme(String filename) {
-		this(Resource.GetFile(filename), filename);
+		this(Resource.GetFile(filename.startsWith("internal://") ? filename : "themes/" + filename), filename);
 	}
 
 	public Theme(String rawFile, String filename) {
@@ -46,7 +46,7 @@ public class Theme {
 		try {
 			rawObject = (JSONObject) JSONValue.parseWithException(rawFile);
 		} catch (Exception e) {
-			System.err.println("Failed to load theme file: " + filename);
+			System.err.println("Failed to load theme file: " + name);
 			e.printStackTrace();
 			return;
 		}
@@ -72,26 +72,26 @@ public class Theme {
 
 			colors.put(k, Color.decode(c.startsWith("#") ? c : "#" + c));
 		}
-		
-		JSONObject arr = (JSONObject)rawObject.get("editor");
-		
+
+		JSONObject arr = (JSONObject) rawObject.get("editor");
+
 		if (!arr.containsKey("default")) {
 			throw new RuntimeErrorException(
 					new Error("Malformated Theme File '" + filename + "' missing 'editor.default' key."));
 		}
-		
+
 		for (Object ark : arr.keySet()) {
 			JSONObject tg = (JSONObject) arr.get(ark);
-			editorColors.put((String)ark, new HashMap<>());
+			editorColors.put((String) ark, new HashMap<>());
 			for (String k : RequiredDefaultEditorKeys) {
 				if (!tg.containsKey(k)) {
 					throw new RuntimeErrorException(
-							new Error("Error! Missing key: '"+ ark+ "."+ k + "' on theme file: " + filename));
+							new Error("Error! Missing key: '" + ark + "." + k + "' on theme file: " + filename));
 				}
-	
+
 				String c = (String) tg.get(k);
 				Color color = Color.decode(c.startsWith("#") ? c : "#" + c);
-				
+
 				Style style = context.addStyle(k, null);
 				StyleConstants.setForeground(style, color);
 				editorColors.get(ark.toString()).put(k, style);
@@ -102,18 +102,18 @@ public class Theme {
 	public static AttributeSet GetEditorStyle(String style) {
 		String key = style.substring(0, style.indexOf("."));
 		String color = style.substring(style.indexOf(".") + 1);
-		
+
 		if (!current.editorColors.containsKey(key)) {
 			key = "default";
 		}
-		
+
 		HashMap<String, Style> colors = current.editorColors.get(key);
-		
+
 		if (colors.containsKey(color))
 			return colors.get(color);
 		return defaultStyle;
 	}
-	
+
 	public static Color GetColor(String key) {
 		if (Theme.current.colors.containsKey(key))
 			return Theme.current.colors.get(key);
@@ -133,8 +133,8 @@ public class Theme {
 				return pathname.isFile() && pathname.getName().toLowerCase().endsWith(".json");
 			}
 		});
-		
-		loadedThemes.add("internal://defaultTheme.json");
+
+		loadedThemes.add("internal://tokyoNightDark.json");
 		for (File f : files) {
 			loadedThemes.add(f.getName());
 		}
@@ -170,5 +170,6 @@ public class Theme {
 
 			"scroller-background", "scroller-foreground",
 
-			"explorer-selected-foreground", "explorer-selected-background", "explorer-colapse-extend-button", };
+			"explorer-selected-foreground", "explorer-selected-background", "explorer-colapse-extend-button",
+			"error-icon", "warn-icon", "info-icon","file-chooser-icons"};
 }

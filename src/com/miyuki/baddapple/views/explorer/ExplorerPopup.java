@@ -56,7 +56,7 @@ public class ExplorerPopup extends JPopupMenu {
 					String name = JOptionPane.showInputDialog(Language.GetKey("new-folder-popup-message"));
 					File newFolder = new File(target.getPath() + File.separator + name);
 					if (!newFolder.mkdir()) {
-						JOptionPane.showMessageDialog(BadApple.Get, Language.GetKey("new-folder-popup-fail"));
+						JOptionPane.showMessageDialog(BadApple.Get, Language.GetKey("new-folder-popup-fail"), name, JOptionPane.WARNING_MESSAGE);
 						return;
 					}
 					selectedNode.add(new ExplorerTreeNode(newFolder));
@@ -108,7 +108,7 @@ public class ExplorerPopup extends JPopupMenu {
 						DiscordPresence.SetCurrentFile(f);
 						explorer.treeModel.reload(selectedNode);
 					} catch (Exception e1) {
-						JOptionPane.showMessageDialog(BadApple.Get, Language.GetKey("new-file-popup-fail"));
+						JOptionPane.showMessageDialog(BadApple.Get, Language.GetKey("new-file-popup-fail"), name, JOptionPane.WARNING_MESSAGE);
 						e1.printStackTrace();
 					}
 				}
@@ -196,6 +196,7 @@ public class ExplorerPopup extends JPopupMenu {
 					else if (f.getParentFile() != null)
 						Desktop.getDesktop().open(f.getParentFile());
 					} catch(Exception errr) {
+						JOptionPane.showMessageDialog(BadApple.Get, Language.GetKey("show-explorer-fail"), f.getName(), JOptionPane.WARNING_MESSAGE);
 						System.err.println("unable to show in system explorer: ");
 						errr.printStackTrace();
 					}

@@ -54,7 +54,7 @@ public class Tray extends JPanel {
 		badAppleButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				BadApple.Get.tabPanel.tabbedPanel.addTab(Language.GetKey("settings-title"), Resource.GetImage("internal://tray/whiteicon.png"),
+				BadApple.Get.tabPanel.tabbedPanel.addTab(Language.GetKey("settings-title"), Resource.GetImageRecolored("internal://tray/whiteicon.png", Theme.GetColor("tab-close-color")),
 														 new SettingsPage());
 			}
 		});

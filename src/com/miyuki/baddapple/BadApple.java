@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -118,7 +119,7 @@ public class BadApple extends JFrame {
 		mnShowWelcome.addActionListener(new ActionListener() {	
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				tabPanel.tabbedPanel.addTab(Language.GetKey("welcome-tab-title"), Resource.GetImage("internal://tray/whiteicon.png"), new WelcomePage());
+				tabPanel.tabbedPanel.addTab(Language.GetKey("welcome-tab-title"), Resource.GetImageRecolored("internal://tray/whiteicon.png", Theme.GetColor("tab-close-color")), new WelcomePage());
 			}
 		});
 		mnEdit.add(mnShowWelcome);
@@ -126,27 +127,43 @@ public class BadApple extends JFrame {
 	}
 	
 	public static void main(String[] args) {
+		
 		StandardOut.CaptureSTD();
 		System.setOut(new StandardOut(System.out,"INFO"));
 		System.setErr(new StandardOut(System.err,"ERROR"));
+		
 		Settings settings = new Settings();
 		Theme.current = new Theme(settings.theme);
 		Language.LoadLanguagePack(settings.language);
 
 		Theme.LoadThemes();
 		IconPack.LoadIconPacks();
-		
 		UIHelper.InstallLAF();
-		
+/*
+        Object[] options = { "Ok", "Cancel" };
+        JOptionPane.showOptionDialog(null, "Click Ok to continue", "Warning", JOptionPane.DEFAULT_OPTION,
+                JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+        JOptionPane.showOptionDialog(null, "Click Ok to continue", "Error", JOptionPane.DEFAULT_OPTION,
+                JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+        JOptionPane.showOptionDialog(null, "Click Ok to continue", "Info", JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+		*/
 		BadApple badApple = new BadApple(settings);
 		
 		badApple.setSize(800,600);
 		badApple.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		badApple.setLocationRelativeTo(null);
-		badApple.tabPanel.tabbedPanel.addTab(Language.GetKey("welcome-tab-title"), Resource.GetImage("internal://tray/whiteicon.png"), new WelcomePage());
+		badApple.tabPanel.tabbedPanel.addTab(Language.GetKey("welcome-tab-title"), Resource.GetImageRecolored("internal://tray/whiteicon.png", Theme.GetColor("tab-close-color")), new WelcomePage());
 			
 		badApple.handler.OnEnable();
 		badApple.sideTray.AddTrayIcon(new ModulesView());
+		
+		if (settings.lastWorkspaces.size() > 0) {
+			File f = new File(settings.lastWorkspaces.get(0));
+			if (f.exists()) {
+				badApple.fileExplorerView.OnFolderOpeningRequest(f);
+			}
+		}
 		
 		badApple.setVisible(true);
 	}

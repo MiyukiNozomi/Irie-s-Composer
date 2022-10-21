@@ -57,6 +57,7 @@ public class WelcomePage extends JPanel {
 			projLabel.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					BadApple.Get.settings.AddWorkspace(f.getPath());
 					BadApple.Get.fileExplorerView.OnFolderOpeningRequest(f);
 				}
 			});

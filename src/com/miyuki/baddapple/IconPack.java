@@ -35,11 +35,11 @@ public class IconPack {
 		}
 		
 		if (rawObject.containsKey("file")) {
-			this.fileIcon = Resource.Resize(Resource.GetImage((String)rawObject.get("file")),16);
+			this.fileIcon = Resource.Resize(Resource.GetImageRecolored((String)rawObject.get("file"), Theme.GetColor("explorer-colapse-extend-button")),16);
 		}
 		
 		if (rawObject.containsKey("folder")) {
-			this.folderIcon = Resource.Resize(Resource.GetImage((String)rawObject.get("folder")),16);
+			this.folderIcon = Resource.Resize(Resource.GetImageRecolored((String)rawObject.get("folder"), Theme.GetColor("explorer-colapse-extend-button")),16);
 		}
 		
 		if (rawObject.containsKey("extensions")) {
@@ -49,7 +49,7 @@ public class IconPack {
 			Set a = extensionsIcons.keySet();
 			
 			for (Object k : a) {
-				extIcons.put((String)k, Resource.Resize(Resource.GetImage((String)extensionsIcons.get(k)), 16));
+				extIcons.put((String)k, Resource.Resize(Resource.GetImageRecolored((String)extensionsIcons.get(k), Theme.GetColor("explorer-colapse-extend-button")), 16));
 			}
 		}
 	}

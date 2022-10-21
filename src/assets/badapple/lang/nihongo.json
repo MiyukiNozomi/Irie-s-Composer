@@ -12,7 +12,7 @@
 	"welcome-lower": "試す https://miyukinozomi.github.io/wiki/projects.html",
 	"welcome-prev": "前に",
 	
-	"module-view-title": "Modules",
+	"module-view-title": "モジュール",
 	"module-view-zero-loaded": "No Modules have been loaded.",
 	
 	"file-explorer-title": "File Explorer",
@@ -30,6 +30,7 @@
 	
 	"new-file-popup-message": "New File",
 	"new-file-popup-fail": "Unable to create file!",
+	"show-explorer-fail": "Unable to show in file explorer. please check debug console.",
 	
 	"console-view-debug-title": "Debug Console",
 	"console-view-minimized-title": "Pull the handle upwards to reveal the built-in terminal.",

@@ -51,7 +51,13 @@
 		
 		"explorer-selected-background": "1C1D29",
 		"explorer-selected-foreground": "A9B1D6",
-		"explorer-colapse-extend-button": "6F675E"
+		"explorer-colapse-extend-button": "6F675E",
+		
+		"error-icon": "FF8E8C",
+		"warn-icon": "FFECAF",
+		"info-icon": "42B0FF",
+		
+		"file-chooser-icons": "FFFFFF"
 	},
 	"editor": {
 		"default": {

@@ -30,6 +30,7 @@
 	
 	"new-file-popup-message": "New File",
 	"new-file-popup-fail": "Unable to create file!",
+	"show-explorer-fail": "Unable to show in file explorer. please check debug console.",
 	
 	"console-view-debug-title": "Debug Console",
 	"console-view-minimized-title": "Pull the handle upwards to reveal the built-in terminal.",

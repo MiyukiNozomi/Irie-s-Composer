@@ -33,7 +33,7 @@ public class ConsolePanel extends JPanel {
 		
 		textPane.setText("<html>");
 		
-		tabPanel.tabbedPanel.addTab(Language.GetKey("console-view-debug-title"), Resource.GetImage("internal://console.png"), UIHelper.ManufactureScroll(textPane));
+		tabPanel.tabbedPanel.addTab(Language.GetKey("console-view-debug-title"), Resource.GetImageRecolored("internal://console.png", Theme.GetColor("tab-close-color")), UIHelper.ManufactureScroll(textPane));
 		
 		add(tabPanel);
 	}

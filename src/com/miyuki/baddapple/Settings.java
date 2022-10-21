@@ -22,7 +22,7 @@ public class Settings {
 	
 	public Settings() {
 		lastWorkspaces = new ArrayList<String>();
-		theme = "internal://defaultTheme.json";
+		theme = "internal://tokyoNightDark.json";
 		language = "english";
 		
 		if (!SettingsFile.exists() || !SettingsFile.isFile()) {
@@ -93,7 +93,11 @@ public class Settings {
 	}
 	
 	public void AddWorkspace(String f) {
-		if (!lastWorkspaces.contains(f));
+		if (!lastWorkspaces.contains(f)) {
 			lastWorkspaces.add(0, f);
+		} else {
+			lastWorkspaces.remove(f);
+			lastWorkspaces.add(0, f);
+		}
 	}
 }
