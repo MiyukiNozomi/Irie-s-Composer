@@ -127,15 +127,16 @@ public class BadApple extends JFrame {
 	}
 	
 	public static void main(String[] args) {
-		
 		StandardOut.CaptureSTD();
 		System.setOut(new StandardOut(System.out,"INFO"));
 		System.setErr(new StandardOut(System.err,"ERROR"));
-		
 		Settings settings = new Settings();
-		Theme.current = new Theme(settings.theme);
 		Language.LoadLanguagePack(settings.language);
 
+		Launcher launcher = new Launcher();
+		
+		Theme.current = new Theme(settings.theme);
+		
 		Theme.LoadThemes();
 		IconPack.LoadIconPacks();
 		UIHelper.InstallLAF();
@@ -166,5 +167,6 @@ public class BadApple extends JFrame {
 		}
 		
 		badApple.setVisible(true);
+		launcher.setVisible(false);
 	}
 }

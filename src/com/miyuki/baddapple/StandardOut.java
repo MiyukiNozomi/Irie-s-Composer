@@ -10,6 +10,7 @@ import com.miyuki.baddapple.ui.ConsolePanel;
 public class StandardOut extends PrintStream {
 
 	private static boolean CaptureSTD = false;
+	public static String LastLine;
 	private static String CapturedBuffer;
 
 	private String prefix;
@@ -55,7 +56,7 @@ public class StandardOut extends PrintStream {
 	private String GetMessage(Object e) {
 		String smh = dtf.format(LocalDateTime.now()) + " [" + prefix + "] "
 				+ Thread.currentThread().getStackTrace()[4].getClassName() + " > " + e.toString();
-
+		LastLine = smh;
 		if (CaptureSTD) {
 			CapturedBuffer += smh + "\n";
 			ConsolePanel.textPane.setText(CapturedBuffer);
