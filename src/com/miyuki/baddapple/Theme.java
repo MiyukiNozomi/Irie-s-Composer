@@ -20,7 +20,7 @@ public class Theme {
 
 	public static Theme current = new Theme();
 	public static List<String> loadedThemes = new ArrayList<String>();
-	public static File themeFolder = new File("themes");
+	public static File themeFolder = new File(BadApple.ExecutionDir.getPath() + File.separator + "themes");
 
 	public HashMap<String, Color> colors;
 	public HashMap<String, HashMap<String, Style>> editorColors;
@@ -170,6 +170,6 @@ public class Theme {
 
 			"scroller-background", "scroller-foreground",
 
-			"explorer-selected-foreground", "explorer-selected-background", "explorer-colapse-extend-button",
+			"explorer-selected-foreground", "explorer-selected-background","explorer-icons", "explorer-colapse-extend-button",
 			"error-icon", "warn-icon", "info-icon","file-chooser-icons"};
 }

@@ -24,6 +24,7 @@ import com.miyuki.baddapple.Language;
 import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.Theme;
 import com.miyuki.baddapple.editor.Editor;
+import com.miyuki.baddapple.editor.viewers.ImageView;
 import com.miyuki.baddapple.ui.UIHelper;
 import com.miyuki.baddapple.ui.UITree;
 import com.miyuki.baddapple.views.View;
@@ -76,8 +77,6 @@ public class FileExplorerView extends View {
 					if (!f.exists() || f.isDirectory()) {
 						return;
 					}
-
-					Editor editor = new Editor();
 					Icon icn;
 					String ext = f.getName();
 					if (ext.contains(".")) {
@@ -86,9 +85,19 @@ public class FileExplorerView extends View {
 					} else {
 						icn = IconPack.current.fileIcon;
 					}
+					
+					if (ext.matches("png|jpg|jpeg|bmp")) {
+						ImageView view = new ImageView(f);
+						BadApple.Get.tabPanel.tabbedPanel.addTab(f.getName(), icn, view);
+						DiscordPresence.SetCurrentFile(f, "Viewing");
+						return;
+					}
+					
+					Editor editor = new Editor();
+					
 					BadApple.Get.tabPanel.tabbedPanel.addTab(f.getName(), icn, editor);
 					editor.OpenFile(f);
-					DiscordPresence.SetCurrentFile(f);
+					DiscordPresence.SetCurrentFile(f, "Editing");
 				}
 			}
 		});

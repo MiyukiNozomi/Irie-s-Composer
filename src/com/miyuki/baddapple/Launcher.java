@@ -105,6 +105,8 @@ public class Launcher extends JFrame {
 		super.setVisible(b);
 
 		if (!b) {
+			Resource.DeleteCache("internal://launcher/background.png");
+			Resource.DeleteCache("internal://launcher/spinnusblend.png");
 			try {
 				thread.join();
 			} catch (InterruptedException e) {

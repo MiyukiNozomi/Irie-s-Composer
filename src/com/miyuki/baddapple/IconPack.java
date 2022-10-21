@@ -16,7 +16,7 @@ public class IconPack {
 
 	public static IconPack current;
 	public static List<String> foundIconPacks = new ArrayList<String>();
-	public static File iconPackFolder = new File("iconpacks");
+	public static File iconPackFolder = new File(BadApple.ExecutionDir.getPath() + File.separator + "iconpacks");
 	
 	public ImageIcon fileIcon;
 	public ImageIcon folderIcon;
@@ -35,11 +35,11 @@ public class IconPack {
 		}
 		
 		if (rawObject.containsKey("file")) {
-			this.fileIcon = Resource.Resize(Resource.GetImageRecolored((String)rawObject.get("file"), Theme.GetColor("explorer-colapse-extend-button")),16);
+			this.fileIcon = Resource.Resize(Resource.GetImageRecolored((String)rawObject.get("file"), Theme.GetColor("explorer-icons")),16);
 		}
 		
 		if (rawObject.containsKey("folder")) {
-			this.folderIcon = Resource.Resize(Resource.GetImageRecolored((String)rawObject.get("folder"), Theme.GetColor("explorer-colapse-extend-button")),16);
+			this.folderIcon = Resource.Resize(Resource.GetImageRecolored((String)rawObject.get("folder"), Theme.GetColor("explorer-icons")),16);
 		}
 		
 		if (rawObject.containsKey("extensions")) {
@@ -49,7 +49,7 @@ public class IconPack {
 			Set a = extensionsIcons.keySet();
 			
 			for (Object k : a) {
-				extIcons.put((String)k, Resource.Resize(Resource.GetImageRecolored((String)extensionsIcons.get(k), Theme.GetColor("explorer-colapse-extend-button")), 16));
+				extIcons.put((String)k, Resource.Resize(Resource.GetImageRecolored((String)extensionsIcons.get(k), Theme.GetColor("explorer-icons")), 16));
 			}
 		}
 	}

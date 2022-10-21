@@ -18,7 +18,7 @@ public class Settings {
 	public String theme;
 	public List<String> lastWorkspaces;
 	
-	public static File SettingsFile = new File("settings.json");
+	public static File SettingsFile = new File(BadApple.ExecutionDir.getPath() + File.separator + "settings.json");
 	
 	public Settings() {
 		lastWorkspaces = new ArrayList<String>();

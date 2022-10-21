@@ -61,6 +61,10 @@ public class Resource {
 			return "";
 		}
 	}
+	
+	public static void DeleteCache(String name) {
+		icons.remove(name);
+	}
 
 	public static ImageIcon GetImage(String name) {
 		if (icons.containsKey(name)) {

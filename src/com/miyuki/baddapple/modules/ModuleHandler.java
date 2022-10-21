@@ -5,9 +5,11 @@ import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.miyuki.baddapple.BadApple;
+
 public class ModuleHandler {
 	
-	public static final File ModuleFolder = new File("mods");
+	public static final File ModuleFolder = new File(BadApple.ExecutionDir.getPath() + File.separator + "mods");
 	public List<ModuleSign> LoadedModules = new ArrayList<ModuleSign>();
 	
 	public void Initialize() {

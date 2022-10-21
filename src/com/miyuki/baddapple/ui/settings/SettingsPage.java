@@ -79,8 +79,10 @@ public class SettingsPage extends JPanel {
 			public void valueChanged(ListSelectionEvent e) {
 				System.out.println("Set panel to " + list.getSelectedValue().title);
 				menuContainer.removeAll();
-				menuContainer.add(list.getSelectedValue().content, BorderLayout.CENTER);
-				repaint();
+				JComponent content = list.getSelectedValue().content;
+				
+				menuContainer.add(content, BorderLayout.CENTER);
+				menuContainer.revalidate();
 			}
 		});
 	}

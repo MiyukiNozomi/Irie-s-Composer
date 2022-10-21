@@ -22,6 +22,8 @@ public class TabCompView extends JPanel {
 	public JLabel titleLbl;
 	public JLabel closeButton;
 	public boolean selected = false;
+	
+	public boolean closeable = true;
 
 	public TabCompView(final JTabbedPane tabbedPane, String title, ImageIcon icon, final Component arg2) {
 		setOpaque(false);
@@ -55,6 +57,8 @@ public class TabCompView extends JPanel {
 		closeButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				if (!closeable)
+					return;
 				if (e.getButton() != MouseEvent.BUTTON1)
 					return;
 				tabbedPane.remove(arg2);

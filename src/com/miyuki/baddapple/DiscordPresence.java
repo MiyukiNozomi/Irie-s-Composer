@@ -81,10 +81,10 @@ public class DiscordPresence {
 	}
 
 	@SuppressWarnings("static-access")
-	public static final void SetCurrentFile(File editor) {
+	public static final void SetCurrentFile(File editor, String activity) {
 		if (failed)
 			return;
-		presence.state = "Editing " + editor.getName();
+		presence.state = activity + editor.getName();
 		rpc.discordUpdatePresence(presence);
 	}
 }

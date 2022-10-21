@@ -28,6 +28,23 @@ import com.miyuki.baddapple.views.explorer.FileExplorerView;
 public class BadApple extends JFrame {
 	private static final long serialVersionUID = 1345151351515L;
 	
+	public static File ExecutionDir;
+	
+	static {
+		try {
+			ExecutionDir = new File(BadApple.class.getProtectionDomain().getCodeSource().getLocation()
+					  .toURI());
+			
+			if (ExecutionDir.getName().matches("bin")) {
+				System.out.println("Development environment detected!");
+				ExecutionDir = ExecutionDir.getParentFile();
+			}
+		} catch(Exception err) {
+			// never happens
+			err.printStackTrace();
+		}
+	}
+	
 	public static BadApple Get;
 	
 	public ModuleHandler handler;
@@ -126,10 +143,13 @@ public class BadApple extends JFrame {
 		menuBar.add(mnEdit);	
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
+		
 		StandardOut.CaptureSTD();
 		System.setOut(new StandardOut(System.out,"INFO"));
 		System.setErr(new StandardOut(System.err,"ERROR"));
+		System.out.println(ExecutionDir.getPath());
+		
 		Settings settings = new Settings();
 		Language.LoadLanguagePack(settings.language);
 
@@ -140,15 +160,7 @@ public class BadApple extends JFrame {
 		Theme.LoadThemes();
 		IconPack.LoadIconPacks();
 		UIHelper.InstallLAF();
-/*
-        Object[] options = { "Ok", "Cancel" };
-        JOptionPane.showOptionDialog(null, "Click Ok to continue", "Warning", JOptionPane.DEFAULT_OPTION,
-                JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-        JOptionPane.showOptionDialog(null, "Click Ok to continue", "Error", JOptionPane.DEFAULT_OPTION,
-                JOptionPane.ERROR_MESSAGE, null, options, options[0]);
-        JOptionPane.showOptionDialog(null, "Click Ok to continue", "Info", JOptionPane.DEFAULT_OPTION,
-                JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-		*/
+
 		BadApple badApple = new BadApple(settings);
 		
 		badApple.setSize(800,600);

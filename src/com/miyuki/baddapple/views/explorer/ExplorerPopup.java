@@ -20,6 +20,7 @@ import com.miyuki.baddapple.IconPack;
 import com.miyuki.baddapple.Language;
 import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.editor.Editor;
+import com.miyuki.baddapple.editor.viewers.ImageView;
 
 /**
  * Honestly, i'm not proud of this class at all.
@@ -105,7 +106,7 @@ public class ExplorerPopup extends JPopupMenu {
 						}
 						BadApple.Get.tabPanel.tabbedPanel.addTab(f.getName(), icn, editor);
 						editor.OpenFile(f);
-						DiscordPresence.SetCurrentFile(f);
+						DiscordPresence.SetCurrentFile(f, "Editing");
 						explorer.treeModel.reload(selectedNode);
 					} catch (Exception e1) {
 						JOptionPane.showMessageDialog(BadApple.Get, Language.GetKey("new-file-popup-fail"), name, JOptionPane.WARNING_MESSAGE);
@@ -127,16 +128,22 @@ public class ExplorerPopup extends JPopupMenu {
 				
 				if (node.getUserObject() instanceof File) {
 					File f = (File) node.getUserObject();
-					Editor editor = new Editor();
 					String ext = f.getName();
 					ImageIcon icn = IconPack.current.fileIcon;
 					if (ext.contains(".")) {
 						ext = ext.substring(ext.indexOf(".") + 1);
 						icn = IconPack.current.GetExtIcon(ext);
 					}
+					if (ext.matches("png|jpg|jpeg|bmp")) {
+						ImageView view = new ImageView(f);
+						BadApple.Get.tabPanel.tabbedPanel.addTab(f.getName(), icn, view);
+						DiscordPresence.SetCurrentFile(f, "Viewing");
+						return;
+					}
+					Editor editor = new Editor();
 					BadApple.Get.tabPanel.tabbedPanel.addTab(f.getName(), icn, editor);
 					editor.OpenFile(f);
-					DiscordPresence.SetCurrentFile(f);
+					DiscordPresence.SetCurrentFile(f, "Editing");
 				}
 			}
 		});

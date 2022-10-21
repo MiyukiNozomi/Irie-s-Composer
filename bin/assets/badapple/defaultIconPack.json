@@ -5,6 +5,11 @@
 	"extensions": {
 		"xml": "internal://exts/xml.png",
 		"lua": "internal://exts/lua.png",
-		"html": "internal://exts/xml.png"
+		"html": "internal://exts/xml.png",
+		
+		"png": "internal://exts/img.png",
+		"jpg": "internal://exts/img.png",
+		"jpeg": "internal://exts/img.png",
+		"bmp": "internal://exts/img.png"
 	}
 }

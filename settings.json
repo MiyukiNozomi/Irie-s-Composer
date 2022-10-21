@@ -1,7 +1,8 @@
 {
-	"theme":"tokyoNightLight.json",
-	"language":"nihongo",
+	"theme":"internal://tokyoNightDark.json",
+	"language":"english",
 	"last-workspaces": [
+		"C:\Users\Shinoa Hiragi\Desktop\TheShinoaFiles\Galery",
 		"C:\Users\Shinoa Hiragi\Documents\BadApuru"
 	]
 }

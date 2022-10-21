@@ -12,6 +12,7 @@ import javax.swing.event.ChangeListener;
 import com.miyuki.baddapple.DiscordPresence;
 import com.miyuki.baddapple.Theme;
 import com.miyuki.baddapple.editor.Editor;
+import com.miyuki.baddapple.editor.viewers.ImageView;
 
 public class TabPanel extends JPanel {
 	private static final long serialVersionUID = 688529252359L;
@@ -44,7 +45,9 @@ public class TabPanel extends JPanel {
 				
 				Component c = tabbedPanel.getComponentAt(saveI);
 				if (c instanceof Editor) {
-					DiscordPresence.SetCurrentFile(((Editor) c).targetFile);
+					DiscordPresence.SetCurrentFile(((Editor) c).targetFile,"Editing");
+				} else if (c instanceof ImageView) {
+					DiscordPresence.SetCurrentFile(((Editor) c).targetFile,"Viewing");
 				} else {
 					DiscordPresence.Reset();
 				}
