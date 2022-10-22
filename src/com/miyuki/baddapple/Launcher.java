@@ -7,11 +7,15 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
-import java.awt.geom.AffineTransform;
+import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
+/**
+ * This view is just here to show that bad apple hasn't crashed in the background.
+ * yet.
+ * */
 public class Launcher extends JFrame {
 	private static final long serialVersionUID = 1L;
 
@@ -32,18 +36,23 @@ public class Launcher extends JFrame {
 		setSize(430, 300);
 		setUndecorated(true);
 		setResizable(false);
+		
+		//Resource.GetImage() sometimes doesn't works with this function
+		//i'm not sure why, so i'll just do it in the "legacy" way
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Launcher.class.getResource("/assets/badapple/icons/icon.png")));
+		
 		setLocationRelativeTo(null);
 		add(canvas, BorderLayout.CENTER);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		this.background = Resource.GetImage("internal://launcher/background.png").getImage();
-		this.rotatingIcon = Resource.GetImage("internal://launcher/spinnusblend.png").getImage();
+		this.rotatingIcon = Resource.GetImage("internal://icon.png").getImage();
 
 		setVisible(true);
 		
 		String titleStr = Language.GetKey("launcher-title");
-		Font title = Resource.DeriveMainFont(Font.PLAIN, 15);
-		Font desc = Resource.DeriveMainFont(Font.PLAIN, 10);
+		Font title = Resource.DeriveMainFont(Font.PLAIN, 16);
+		Font desc = Resource.DeriveMainFont(Font.PLAIN, 5);
 		
 		thread = new Thread(new Runnable() {
 			Graphics2D g;
@@ -58,17 +67,18 @@ public class Launcher extends JFrame {
 					}
 					g = (Graphics2D) bs.getDrawGraphics();
 					g.drawImage(background, 0, 0, null);
-
+/*
 					 AffineTransform tr = new AffineTransform();
-					    // X and Y are the coordinates of the image
-					    tr.translate(10, 236);
+					 tr.translate(10, 236);
 					    tr.rotate(
 					            Math.toRadians(logoRotation),
 					            rotatingIcon.getWidth(null) / 2,
 					            rotatingIcon.getHeight(null) / 2
 					    );
+
+					//    tr.translate(10, 236);
 					
-					g.drawImage(rotatingIcon, tr, null);
+					g.drawImage(rotatingIcon, tr, null);*/
 					
 			        logoRotation -= 0.5;
 			        if (logoRotation < -360)
@@ -85,7 +95,13 @@ public class Launcher extends JFrame {
 					g.setFont(title);
 					g.drawString(titleStr, 10, 20);
 					g.setFont(desc);
-					g.drawString(StandardOut.LastLine, 10, 30);
+					
+					String[] lines = StandardOut.GetCapturedBuffer().split("\n");
+					int ln = 0;
+					for (String l : lines) {
+						g.drawString(l, 10, 30 + (5* ln));
+						ln++;
+					}
 					
 			        bs.show();
 					

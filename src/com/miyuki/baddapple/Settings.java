@@ -87,8 +87,8 @@ public class Settings {
 	
 	String CleanupPath(String k) {
 		String f = k;
-		/*while (f.contains("\\"))
-			f = f.replace("\\", "\\\\");*/
+		while (f.contains("\\"))
+			f = f.replace("\\", "/");
 		return f;
 	}
 	
