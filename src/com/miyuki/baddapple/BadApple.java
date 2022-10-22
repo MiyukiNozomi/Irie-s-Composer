@@ -39,6 +39,11 @@ public class BadApple extends JFrame {
 				System.out.println("Development environment detected!");
 				ExecutionDir = ExecutionDir.getParentFile();
 			}
+			// running straight out from a jar file
+			if (ExecutionDir.getName().endsWith(".jar")) {
+				System.out.println("Running out of a JAR file");
+				ExecutionDir = ExecutionDir.getParentFile();
+			}
 		} catch(Exception err) {
 			// never happens
 			err.printStackTrace();
