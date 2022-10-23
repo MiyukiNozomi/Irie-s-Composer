@@ -10,6 +10,9 @@ import javax.swing.ImageIcon;
 
 import com.miyuki.baddapple.Resource;
 
+/**
+ * Internal Module Loader
+ */
 public class ModuleResource {
 
 	public HashMap<String, ImageIcon> LoadedIcons = new HashMap<String, ImageIcon>();
@@ -18,6 +21,13 @@ public class ModuleResource {
 	
 	private String loaderPath = "";
 	
+	/**
+	 * Changes the loader path for your module,
+	 * use this if you're storing stuff
+	 * inside another package, such as
+	 * 
+	 * assets/yourname/
+	 */
 	public void SetCustomLoaderPath(String loaderPath) {
 		this.loaderPath = loaderPath;
 	}
@@ -26,14 +36,28 @@ public class ModuleResource {
 		this.sign = sign;
 	}
 	
+	/**
+	 * Wrapper around Resource.DeriveMainFont
+	 */
 	public Font DeriveMainFont(int type, int size) {
 		return Resource.DeriveMainFont(type, size);
 	}
 	
+	/**
+	 * Returns the font used by the Editor.
+	 */
 	public Font GetMainFont() {
 		return Resource.mainFont;
 	}
 	
+	/**
+	 * Loads an image.
+	 * if the path starts with "internal://"
+	 * it will use BadApple's internal asset package
+	 * instead of the custom loader Path you've specified.
+	 * 
+	 * By the way, this function caches every icon you load.
+	 */
 	public ImageIcon GetImage(String name) {
 		if (name.contains("internal://")) {
 			return Resource.GetImage(name);
@@ -56,5 +80,12 @@ public class ModuleResource {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	/**
+	 * Deletes a cached image.
+	 */
+	public void DeleteCache(String name) {
+		LoadedIcons.remove(name);
 	}
 }

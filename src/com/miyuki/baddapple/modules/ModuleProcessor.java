@@ -29,6 +29,11 @@ public class ModuleProcessor {
 					String name = e.getName();
 					String sub = name.replace("/", ".").substring(0,
 							name.indexOf(".class"));
+					System.out.println("Listing class: " + sub);
+					if (sub.startsWith("com.miyuki.baddapple") || sub.startsWith("assets.badapple")) {
+						System.err.println("HMODULE: BadApple security deal broken; cannot load module:  " + f.getPath() + " since its using the same package name as BadApple.");
+						break;
+					}
 					list.add(sub);
 				}
 			}
