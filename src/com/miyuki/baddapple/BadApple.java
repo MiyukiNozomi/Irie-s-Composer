@@ -156,6 +156,8 @@ public class BadApple extends JFrame {
 		System.out.println(ExecutionDir.getPath());
 		
 		Settings settings = new Settings();
+		Resource.Initialize(settings);
+		
 		Language.LoadLanguagePack(settings.language);
 
 		Launcher launcher = new Launcher();

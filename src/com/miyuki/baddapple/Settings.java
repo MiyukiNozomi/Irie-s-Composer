@@ -16,6 +16,7 @@ public class Settings {
 	public JSONObject rawSettings;
 	public String language;
 	public String theme;
+	public int editorFontsize;
 	public List<String> lastWorkspaces;
 	
 	public static File SettingsFile = new File(BadApple.ExecutionDir.getPath() + File.separator + "settings.json");
@@ -24,6 +25,7 @@ public class Settings {
 		lastWorkspaces = new ArrayList<String>();
 		theme = "internal://tokyoNightDark.json";
 		language = "english";
+		editorFontsize = 14;
 		
 		if (!SettingsFile.exists() || !SettingsFile.isFile()) {
 			SaveSettings();
@@ -41,6 +43,12 @@ public class Settings {
 		if (rawSettings.containsKey("theme")) {
 			theme = (String)rawSettings.get("theme");
 		}
+		
+		if (rawSettings.containsKey("editor-fontsize")) {
+			editorFontsize = Integer.parseInt(rawSettings.get("editor-fontsize").toString());
+			System.out.println(editorFontsize);
+		}
+		
 		
 		if (rawSettings.containsKey("language")) {
 			language = (String)rawSettings.get("language");
@@ -62,6 +70,7 @@ public class Settings {
 			writer.write("{\n");
 			writer.write("\t\"theme\":\"" + theme + "\",\n");
 			writer.write("\t\"language\":\"" + language + "\",\n");
+			writer.write("\t\"editor-fontsize\":\"" + editorFontsize + "\",\n");
 			writer.write("\t\"last-workspaces\": [\n");
 			
 			for (int i = 0; i < lastWorkspaces.size(); i++) {

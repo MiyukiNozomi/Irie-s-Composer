@@ -38,13 +38,16 @@
 	"console-view-minimized-title": "Pull the handle upwards to reveal the built-in terminal.",
 	
 	"settings-title": "設定",
-	"settings-page-general": "全般",
 	
 	"settings-page-ui": "インターフェース",
+	"settings-page-editor": "Editor",
+	
 	"settings-page-ui-theme": "テーマ",
 	"settings-page-ui-lang": "言語",
 	
 	"settings-page-ui-lower": "Restart BadApple to apply the changes.",
+	
+	"settings-editor-fontsize": "Font Size",
 	
 	"settings-page-select": "Click on an option on the left side."
 }

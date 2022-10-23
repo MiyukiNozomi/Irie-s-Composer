@@ -80,6 +80,7 @@ public class UIHelper {
 		UIManager.put("List.noFocusBorder", BorderFactory.createEmptyBorder());
 		
 		UIManager.put("List.font", menuFont);
+		UIManager.put("Label.font", menuFont);
 
 		UIManager.put("Panel.background", Theme.GetColor("panel-background"));
 		UIManager.put("Panel.foreground", Theme.GetColor("panel-foreground"));

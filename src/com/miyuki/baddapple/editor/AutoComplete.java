@@ -32,7 +32,7 @@ public class AutoComplete extends JPopupMenu {
 
 	private JTextPane textpane;
 	private DefaultListModel<CompletionSuggestion> model = new DefaultListModel<CompletionSuggestion>();
-	private JList<CompletionSuggestion> list = new JList<CompletionSuggestion>(model);
+	public JList<CompletionSuggestion> list = new JList<CompletionSuggestion>(model);
 	private StringBuffer word = new StringBuffer();
 	public List<CompletionSuggestion> words = new ArrayList<CompletionSuggestion>();
 	public List<CompletionSuggestion> updatedWords = new ArrayList<CompletionSuggestion>();

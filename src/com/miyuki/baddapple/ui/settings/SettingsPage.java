@@ -30,7 +30,7 @@ public class SettingsPage extends JPanel {
 		
 		JList<SettingsMenu> list = new JList<SettingsMenu>(new SettingsMenu[] {
 				 new SettingsMenu("settings-page-ui", new UISettingsPage()),
-				 new SettingsMenu("settings-page-general", new JLabel("panel1"))
+				 new SettingsMenu("settings-page-editor", new EditorSettingsPage())
 		});
 		list.setBackground(Theme.GetColor("editor-background"));
 		list.setPreferredSize(new Dimension(168, 0));

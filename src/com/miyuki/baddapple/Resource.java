@@ -29,7 +29,11 @@ public class Resource {
 	public static Font mainFont = LoadFont("yaheiui.ttf");
 
 	// TODO add support for custom fonts
-	public static Font editorFont = LoadFont("consolas.ttf").deriveFont(Font.PLAIN, 16);
+	public static Font editorFont = LoadFont("consolas.ttf");
+	
+	static void Initialize(Settings settings) {
+		editorFont = editorFont.deriveFont(Font.PLAIN, settings.editorFontsize);
+	}
 
 	public static HashMap<String, ImageIcon> icons = new HashMap<String, ImageIcon>();
 
