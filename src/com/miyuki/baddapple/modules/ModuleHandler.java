@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.miyuki.baddapple.BadApple;
+import com.miyuki.baddapple.Debug;
 
 public class ModuleHandler {
 
@@ -16,7 +17,7 @@ public class ModuleHandler {
 		try {
 			if (!ModuleFolder.exists() || !ModuleFolder.isDirectory()) {
 				ModuleFolder.mkdir();
-				System.out.println("HMODULE: No plugins to load.");
+				Debug.Warn("HMODULE: No plugins to load.");
 				return;
 			}
 
@@ -28,7 +29,7 @@ public class ModuleHandler {
 			});
 
 			if (jars == null || jars.length == 0) {
-				System.out.println("HMODULE: No jars to load");
+				Debug.Info("HMODULE: No jars to load");
 				return;
 			}
 
@@ -45,7 +46,7 @@ public class ModuleHandler {
 				// Checking for duplicates
 				for (ModuleSign il : LoadedModules) {
 					if (il.clazz.equals(info.clazz)) {
-						System.err.println(
+						Debug.Error(
 								"Found a duplicated module at paths:\n\t" + f.getPath() + "\n\t" + il.source.getPath());
 						isDuplicate = true;
 						break;
@@ -54,18 +55,18 @@ public class ModuleHandler {
 
 				if (!isDuplicate) {
 					LoadedModules.add(info);
-					System.out.println("Loaded Module: " + info.sign.name());
+					Debug.Info("Loaded Module: " + info.sign.name());
 				}
 			}
 		} catch (Exception ee) {
-			System.err.println("HMODULE: Unable to Initialize ModuleHandler!");
+			Debug.Error("HMODULE: Unable to Initialize ModuleHandler!");
 			ee.printStackTrace();
 		}
 	}
 
 	public void OnEnable() {
 		for (ModuleSign ps : LoadedModules) {
-			ps.icon = ps.module.Resource.GetImage(ps.sign.iconPath());
+			ps.icon = ps.sign.iconPath(); 
 			ps.module.onAwake();
 		}
 	}

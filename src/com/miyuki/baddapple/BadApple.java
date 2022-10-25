@@ -29,27 +29,35 @@ public class BadApple extends JFrame {
 	private static final long serialVersionUID = 1345151351515L;
 	
 	public static File ExecutionDir;
+	/**Actually this should be called "Debug-Build"*/
+	public static boolean DevelopmentEnvironment;
 	
 	static {
 		try {
+			//Grabs the execution directory
 			ExecutionDir = new File(BadApple.class.getProtectionDomain().getCodeSource().getLocation()
 					  .toURI());
 			
+			// If we're on the bin directory, it knows that its running within eclipse.
 			if (ExecutionDir.getName().matches("bin")) {
-				System.out.println("Development environment detected!");
+				Debug.Info("Development environment detected!");
+				DevelopmentEnvironment = true;
 				ExecutionDir = ExecutionDir.getParentFile();
 			}
+			// otherwise, we're
 			// running straight out from a jar file
 			if (ExecutionDir.getName().endsWith(".jar")) {
-				System.out.println("Running out of a JAR file");
+				Debug.Info("Running out of a JAR file");
 				ExecutionDir = ExecutionDir.getParentFile();
 			}
+			Debug.Info("Execution Dir is : " + ExecutionDir);
 		} catch(Exception err) {
 			// never happens
 			err.printStackTrace();
 		}
 	}
 	
+	//TODO disallow assigns from whitin modules
 	public static BadApple Get;
 	
 	public ModuleHandler handler;
@@ -67,13 +75,19 @@ public class BadApple extends JFrame {
 	BadApple(Settings settings) {
 		super("BadApple Studio");
 		this.settings = settings;
-		BadApple.Get = this;
 		
+		//Sets the global handle
+		BadApple.Get = this;
+		// initializes the module handler,
+		// already loads every module
 		handler = new ModuleHandler();
 		handler.Initialize();
+		
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
+				// we want to save settings AND send a disable signal to every
+				// module.
 				settings.SaveSettings();
 				handler.OnDisable();
 			}
@@ -84,6 +98,8 @@ public class BadApple extends JFrame {
 		setJMenuBar(menuBar);
 		
 		contentPanel = new JPanel();
+		// honestly, i shouldn't really set this panel's background
+		// since its not really visible
 		contentPanel.setBackground(Theme.GetColor("main-background"));
 		contentPanel.setLayout(new BorderLayout());
 		
@@ -94,6 +110,10 @@ public class BadApple extends JFrame {
 		//i'm not sure why, so i'll just do it in the "legacy" way
 		setIconImage(Toolkit.getDefaultToolkit().getImage(BadApple.class.getResource("/assets/badapple/icons/icon.png")));
 		
+		//I should probably replace the UIHelper manufacture functions with an actual LookAndFeel.
+		// but i wasn't really able to do it without
+		// losing the icons on the buttons of the scroll bars.
+		// you can see the problem when you open a File Dialog.
 		mainSplitPanel = UIHelper.ManufactureSplit(JSplitPane.HORIZONTAL_SPLIT);
 		JSplitPane editorCmdSplit = UIHelper.ManufactureSplit(JSplitPane.VERTICAL_SPLIT);
 		
@@ -124,6 +144,10 @@ public class BadApple extends JFrame {
 		mnOpenFolder.addActionListener(new ActionListener() {	
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// honestly, i don't really like to use JFileChooser,
+				// AWT's FileDialog seems much better, but it doesn't allows 
+				// you to specifically load directories so. i'll have to use this one
+				// instead.
 				JFileChooser chooser = new JFileChooser();
 				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				
@@ -137,6 +161,12 @@ public class BadApple extends JFrame {
 		menuBar.add(mnFile);
 		
 		JMenu mnEdit = new JMenu(Language.GetKey("menu-edit"));
+		
+		// fun fact: this option only exists to test
+		// the welcome screen with the JVM's Hot Replacement
+		// also known as editing the program while its running
+		// that's why i love java, you can just say "screw it
+		// i'm just going to change everything without rerunning the program"
 		JMenuItem mnShowWelcome = new JMenuItem(Language.GetKey("menu-edit-show-welcome"));
 		mnShowWelcome.addActionListener(new ActionListener() {	
 			@Override
@@ -149,27 +179,44 @@ public class BadApple extends JFrame {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		
-		StandardOut.CaptureSTD();
+		Debug.CaptureSTD();
+		// TODO i should probably block this function
+		// from being used within modules
 		System.setOut(new StandardOut(System.out,"INFO"));
 		System.setErr(new StandardOut(System.err,"ERROR"));
-		System.out.println(ExecutionDir.getPath());
 		
+		// i'm already printing this out earlier
+		// Debug.Info(ExecutionDir.getPath());
+		
+		// Initialize everything based off user settings
 		Settings settings = new Settings();
+		
 		Resource.Initialize(settings);
 		
 		Language.LoadLanguagePack(settings.language);
-
+		
 		Launcher launcher = new Launcher();
 		
 		Theme.current = new Theme(settings.theme);
+		// this looks cursed doesn't it?
+		// we don't need to look for other themes if the one we're going
+		// to use is already saved within the settings class.
 		
+		// TODO only search for themes when opening the settings page
 		Theme.LoadThemes();
+		
+		// icon packs are a old functionality of this program
+		// i never really finished them,
+		// but i should go back to them
 		IconPack.LoadIconPacks();
+		
 		UIHelper.InstallLAF();
 
 		BadApple badApple = new BadApple(settings);
 		
+		// i am only setting up the actual window here
+		// because of eclipse's WindowBuilder acting weird
+		// when the thing you're editing is bigger than the viewport.
 		badApple.setSize(800,600);
 		badApple.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		badApple.setLocationRelativeTo(null);
@@ -178,6 +225,8 @@ public class BadApple extends JFrame {
 		badApple.handler.OnEnable();
 		badApple.sideTray.AddTrayIcon(new ModulesView());
 		
+		// yeah, we don't need to grab the last element of the lastWorkspaces array,
+		// its because settings already """sorts it""" when an element is added
 		if (settings.lastWorkspaces.size() > 0) {
 			File f = new File(settings.lastWorkspaces.get(0));
 			if (f.exists()) {
@@ -185,7 +234,9 @@ public class BadApple extends JFrame {
 			}
 		}
 		
+		// hide the launcher, show main window
 		badApple.setVisible(true);
+		Debug.StopCapture();
 		launcher.setVisible(false);
 	}
 }

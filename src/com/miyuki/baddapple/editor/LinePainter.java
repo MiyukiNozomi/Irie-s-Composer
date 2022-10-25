@@ -99,7 +99,7 @@ public class LinePainter implements Highlighter.HighlightPainter,
 			if (lastView == null)
 				lastView = r;
 		} catch (BadLocationException ble) {
-			System.out.println(ble);
+			//System.out.println(ble);
 		}
 	}
 

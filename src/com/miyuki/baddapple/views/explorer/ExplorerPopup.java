@@ -15,6 +15,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.tree.TreeNode;
 
 import com.miyuki.baddapple.BadApple;
+import com.miyuki.baddapple.Debug;
 import com.miyuki.baddapple.DiscordPresence;
 import com.miyuki.baddapple.IconPack;
 import com.miyuki.baddapple.Language;
@@ -171,7 +172,7 @@ public class ExplorerPopup extends JPopupMenu {
 					explorer.treeModel.reload(parent);
 					
 					if (f.isFile()) {
-						System.out.println("Deleting file: " + f.getPath());
+						Debug.Info("Deleting file: " + f.getPath());
 						f.delete();
 					} else {
 						explorer.RecursiveDelete(f);

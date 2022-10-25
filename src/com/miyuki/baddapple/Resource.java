@@ -117,12 +117,12 @@ public class Resource {
 
 	public static InputStream GetResourceAsStream(String resource) {
 		if (resource.contains("internal://")) {
-			System.out.println("Opening Internal File: " + resource);
+			Debug.Info("Opening Internal File: " + resource);
 			String target = resource.replace("internal://", "");
 			return Resource.class.getResourceAsStream("/assets/badapple/" + target);
 		} else {
 			try {
-				System.out.println("Opening External File: " + resource);
+				Debug.Info("Opening External File: " + resource);
 				return new FileInputStream(new File(resource));
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();

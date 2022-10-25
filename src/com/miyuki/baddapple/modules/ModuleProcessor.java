@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import com.miyuki.baddapple.Debug;
+
 public class ModuleProcessor {
 	private ModuleProcessor() {}
 
@@ -29,7 +31,7 @@ public class ModuleProcessor {
 					String name = e.getName();
 					String sub = name.replace("/", ".").substring(0,
 							name.indexOf(".class"));
-					System.out.println("Listing class: " + sub);
+					Debug.Info("Listing class: " + sub);
 					if (sub.startsWith("com.miyuki.baddapple") || sub.startsWith("assets.badapple")) {
 						System.err.println("HMODULE: BadApple security deal broken; cannot load module:  " + f.getPath() + " since its using the same package name as BadApple.");
 						break;

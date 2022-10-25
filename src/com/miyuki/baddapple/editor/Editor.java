@@ -24,6 +24,7 @@ import javax.swing.KeyStroke;
 import javax.swing.text.AbstractDocument;
 
 import com.miyuki.baddapple.BadApple;
+import com.miyuki.baddapple.Debug;
 import com.miyuki.baddapple.Registry;
 import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.Theme;
@@ -117,12 +118,12 @@ public class Editor extends JPanel {
 			if (targetFile == null)
 				return;
 			Files.write(Paths.get(targetFile.getPath()), document.getText().getBytes());
-			System.out.println("Successfully saved file!");
+			Debug.Info("Successfully saved file!");
 			// detail.setText("Saved!");
 			//Footer.GetInstance().getLineAndColumnLbl().setText("Saved!");
 			BadApple.Get.tabPanel.SetTitleAt(this, targetFile.getName());
 		} catch (Exception e) {
-			System.err.println("Unable to save file: " + targetFile.getPath());
+			Debug.Error("Unable to save file: " + targetFile.getPath());
 			e.printStackTrace();
 		}
 	}
@@ -133,7 +134,7 @@ public class Editor extends JPanel {
 		String ext = f.getName();
 		if (ext.indexOf(".") != -1) {
 			ext = ext.substring(ext.indexOf(".") + 1);
-			System.out.println("Its extension is: " + ext);
+			Debug.Info("Its extension is: " + ext);
 			HighlightEngine engine = Registry.GetEngineFor(ext);
 			if (engine != null)
 				document.setDocument(engine);

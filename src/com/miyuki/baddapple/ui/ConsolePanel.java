@@ -6,7 +6,6 @@ import java.awt.Font;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextPane;
 
 import com.miyuki.baddapple.Language;
 import com.miyuki.baddapple.Resource;
@@ -14,8 +13,6 @@ import com.miyuki.baddapple.Theme;
 
 public class ConsolePanel extends JPanel {
 	private static final long serialVersionUID = 1394558923852L;
-	
-	public static JTextPane textPane = new JTextPane();
 	
 	public boolean minimized = true;
 	public JLabel maximizeLabel;
@@ -25,17 +22,6 @@ public class ConsolePanel extends JPanel {
 		setPreferredSize(new Dimension(10, 200));
 		tabPanel = new TabPanel();
 		setLayout(new BorderLayout(0, 0));
-
-		textPane.setFont(Resource.DeriveMainFont(Font.PLAIN, 14));
-		textPane.setForeground(Theme.GetColor("editor-foreground"));
-		textPane.setBackground(Theme.GetColor("editor-background"));
-		textPane.setEditable(false);
-		
-		textPane.setText("<html>");
-		
-		tabPanel.tabbedPanel.addTab(Language.GetKey("console-view-debug-title"), Resource.GetImageRecolored("internal://console.png", Theme.GetColor("tab-close-color")), UIHelper.ManufactureScroll(textPane));
-		((TabCompView)tabPanel.tabbedPanel.getTabComponentAt(0)).closeable = false;
-		
 		
 		add(tabPanel);
 	}

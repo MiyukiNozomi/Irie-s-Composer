@@ -77,7 +77,7 @@ public class IconPack {
 			foundIconPacks.add(f.getName());
 		}
 		
-		System.out.println("Loaded " + foundIconPacks.size() + " Icon Packs.");
+		Debug.Info("Loaded " + foundIconPacks.size() + " Icon Packs.");
 		current = new IconPack(Resource.GetFile("internal://defaultIconPack.json"), "defaultIconPack.json");
 	}
 }

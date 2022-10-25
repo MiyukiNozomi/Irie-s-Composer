@@ -3,6 +3,8 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -20,22 +22,13 @@ public class ModulesView extends View {
 	Font descFont = Resource.DeriveMainFont(Font.PLAIN, 12);
 	Font titleFont = Resource.DeriveMainFont(Font.BOLD, 13);
 	
+	List<String> iconsToDelete = new ArrayList<String>();
+	
 	public ModulesView() {
 		super(Language.GetKey("module-view-title"), "internal://tray/module.png");
 		content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-		
-		for (ModuleSign sign : BadApple.Get.handler.LoadedModules) {
-			MakePane(sign);
-		}
-		
-		if (BadApple.Get.handler.LoadedModules.size() == 0) {
-			JLabel lbl = new JLabel(Language.GetKey("module-view-zero-loaded"));
-			lbl.setHorizontalAlignment(JLabel.CENTER);
-			lbl.setFont(titleFont);
-			content.add(lbl);
-		}
 	}
-	
+	/**ps.module.Resource.GetImage(ps.sign.iconPath())*/
 	public void MakePane(ModuleSign sign) {
 
 		JPanel panel = new JPanel();
@@ -47,7 +40,8 @@ public class ModulesView extends View {
 		
 		JLabel lblIcon = new JLabel();
 		lblIcon.setHorizontalAlignment(JLabel.CENTER);
-		lblIcon.setIcon(Resource.Resize(sign.icon, 59));
+		iconsToDelete.add(sign.source.getName() + sign.icon);
+		lblIcon.setIcon(Resource.Resize(sign.module.Resource.GetImage(sign.icon), 59));
 		lblIcon.setPreferredSize(new Dimension(64, 64));
 		panel.add(lblIcon, BorderLayout.WEST);
 		
@@ -74,5 +68,32 @@ public class ModulesView extends View {
 		
 		JPanel panel_2 = new JPanel();
 		subPanel.add(panel_2, BorderLayout.WEST);
+	}
+	
+	@Override
+	public void OnInit() {
+		super.OnInit();
+		content.removeAll();
+		for (ModuleSign sign : BadApple.Get.handler.LoadedModules) {
+			MakePane(sign);
+		}
+		
+		if (BadApple.Get.handler.LoadedModules.size() == 0) {
+			JLabel lbl = new JLabel(Language.GetKey("module-view-zero-loaded"));
+			lbl.setHorizontalAlignment(JLabel.CENTER);
+			lbl.setFont(titleFont);
+			content.add(lbl);
+		}
+		content.revalidate();
+	}
+	
+	@Override
+	public void OnRelease() {
+		super.OnRelease();
+		for (ModuleSign sign : BadApple.Get.handler.LoadedModules) {
+			for (String s : iconsToDelete) {
+				sign.module.Resource.DeleteCache(s);
+			}
+		}
 	}
 }

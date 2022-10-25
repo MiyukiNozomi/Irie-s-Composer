@@ -13,7 +13,7 @@ public class Registry {
 			throw new Error("Already Registered Highlighting Engine for ext " + ext + " already registered candidate is: "
 					+ highlightingEngines.get(ext).getClass().getTypeName());
 		highlightingEngines.put(ext,  engine);
-		System.out.println("Engine for ext '" + ext+ "' registered.");
+		Debug.Info("Engine for ext '" + ext+ "' registered.");
 	}
 	
 	public static HighlightEngine GetEngineFor(String ext) {

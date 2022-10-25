@@ -4,20 +4,16 @@ import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import com.miyuki.baddapple.ui.ConsolePanel;
-
 /** class to keep track of Java's Standard Out*/
 public class StandardOut extends PrintStream {
 
-	private static boolean CaptureSTD = false;
-	public static String LastLine;
-	private static String CapturedBuffer;
-
 	private String prefix;
 	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+	PrintStream sst;
 	
 	public StandardOut(PrintStream sst, String prefix) {
 		super(sst);
+		this.sst = sst;
 		this.prefix = prefix;
 	}
 
@@ -54,31 +50,16 @@ public class StandardOut extends PrintStream {
 	}
 	
 	private String GetMessage(Object e) {
-		String smh = dtf.format(LocalDateTime.now()) + " [" + prefix + "] "
-				+ Thread.currentThread().getStackTrace()[4].getClassName() + " > " + e.toString();
-		LastLine = smh;
-		if (CaptureSTD) {
-			CapturedBuffer += smh + "\n";
-			ConsolePanel.textPane.setText(CapturedBuffer);
+		String content = e.toString();
+		String className = Thread.currentThread().getStackTrace()[4].getClassName();
+		
+		String smh = "STDOUT " + dtf.format(LocalDateTime.now()) + " [" + prefix + "] "
+				+ className + " > " + content;
+		Debug.LastLine = smh;
+		if (Debug.IsCapturing()) {
+			Debug.CapturedBuffer += smh + "\n";
 		} 
 
 		return smh;
-	}
-
-	public static boolean IsCapturing() {
-		return CaptureSTD;
-	}
-	
-	public static void CaptureSTD() {
-		CaptureSTD = true;
-		CapturedBuffer = "";
-	}
-
-	public static void StopCapture() {
-		CaptureSTD = false;
-	}
-
-	public static String GetCapturedBuffer() {
-		return CapturedBuffer;
 	}
 }

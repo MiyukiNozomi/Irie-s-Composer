@@ -15,6 +15,7 @@ import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import com.miyuki.baddapple.Debug;
 import com.miyuki.baddapple.Language;
 import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.Theme;
@@ -77,7 +78,7 @@ public class SettingsPage extends JPanel {
 		list.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				System.out.println("Set panel to " + list.getSelectedValue().title);
+				Debug.Info("Set panel to " + list.getSelectedValue().title);
 				menuContainer.removeAll();
 				JComponent content = list.getSelectedValue().content;
 				

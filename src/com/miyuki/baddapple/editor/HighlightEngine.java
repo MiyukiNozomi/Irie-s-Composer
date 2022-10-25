@@ -38,6 +38,13 @@ public class HighlightEngine extends DefaultStyledDocument {
 	public void UpdateHighlight(boolean textAdded, int ofset, String str, int removedLength) {
 	}
 
+	/**
+	 * This Function is innefective and doesn't properly
+	 * tokenize the file.
+	 * 
+	 * use GetLexer() instead.
+	 * */
+	@Deprecated
 	protected List<Token> GetTokens() {
 		String content = "";
 		try {
@@ -66,7 +73,13 @@ public class HighlightEngine extends DefaultStyledDocument {
 		}
 		return words;
 	}
-
+	
+	/**
+	 * Use com.miyuki.baddapple.editor.Lexer.Token instead
+	 * this class was used by HighlightEngine#Token, which is a 
+	 * Ineffective Lexer. 
+	 */
+	@Deprecated
 	public static class Token {
 
 		public int position;
@@ -75,6 +88,19 @@ public class HighlightEngine extends DefaultStyledDocument {
 		public Token(String word, int position) {
 			this.position = position;
 			this.word = word;
+		}
+	}
+	
+	public Lexer GetLexer() {
+		return new Lexer(getText());
+	}
+	
+	public String getText() {
+		try {
+			return getText(0, getLength());
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+			return "";
 		}
 	}
 }

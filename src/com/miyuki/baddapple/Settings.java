@@ -46,7 +46,6 @@ public class Settings {
 		
 		if (rawSettings.containsKey("editor-fontsize")) {
 			editorFontsize = Integer.parseInt(rawSettings.get("editor-fontsize").toString());
-			System.out.println(editorFontsize);
 		}
 		
 		

@@ -18,6 +18,7 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import com.miyuki.baddapple.BadApple;
+import com.miyuki.baddapple.Debug;
 import com.miyuki.baddapple.DiscordPresence;
 import com.miyuki.baddapple.IconPack;
 import com.miyuki.baddapple.Language;
@@ -168,7 +169,7 @@ public class FileExplorerView extends View {
 	}
 
 	public void RecursiveDelete(File targetDirectory) {
-		System.out.println("Deleting: " + targetDirectory.getPath());
+		Debug.Info("Deleting: " + targetDirectory.getPath());
         File[] data = targetDirectory.listFiles();
 
         for (File file : data) {

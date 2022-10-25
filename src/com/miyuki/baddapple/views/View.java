@@ -43,4 +43,18 @@ public abstract class View extends JPanel {
 		JPanel panel_1 = new JPanel();
 		panel.add(panel_1, BorderLayout.WEST);
 	}
+	
+	/**
+	 * When invoking, loads icons
+	 */
+	public void OnInit() {
+		System.out.println("Initializing view: " + title);
+	}
+	
+	/**
+	 * Unloads icons when leaving 
+	 */
+	public void OnRelease() {
+		System.out.println("Releasing view: " + title);
+	}
 }

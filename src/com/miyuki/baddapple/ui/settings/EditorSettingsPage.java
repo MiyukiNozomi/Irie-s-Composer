@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import com.miyuki.baddapple.BadApple;
+import com.miyuki.baddapple.Debug;
 import com.miyuki.baddapple.Language;
 import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.editor.Editor;
@@ -41,7 +42,7 @@ public class EditorSettingsPage extends JPanel {
 				if (lblFieldFontSize.isEditable()) {
 					
 					if (!lblFieldFontSize.getText().matches("[0-9]+[\\.]?[0-9]*")) {
-						System.out.println("woops, inserted non-numeric value into fontSize Field");
+						Debug.Info("woops, inserted non-numeric value into fontSize Field");
 						return;
 					}
 					int newSize = Integer.parseInt(lblFieldFontSize.getText());

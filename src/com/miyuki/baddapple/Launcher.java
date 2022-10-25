@@ -96,7 +96,7 @@ public class Launcher extends JFrame {
 					g.drawString(titleStr, 10, 20);
 					g.setFont(desc);
 					
-					String[] lines = StandardOut.GetCapturedBuffer().split("\n");
+					String[] lines = Debug.GetCapturedBuffer().split("\n");
 					int ln = 0;
 					for (String l : lines) {
 						g.drawString(l, 10, 30 + (5* ln));

@@ -46,7 +46,7 @@ public class Theme {
 		try {
 			rawObject = (JSONObject) JSONValue.parseWithException(rawFile);
 		} catch (Exception e) {
-			System.err.println("Failed to load theme file: " + name);
+			Debug.Error("Failed to load theme file: " + name);
 			e.printStackTrace();
 			return;
 		}
@@ -139,7 +139,7 @@ public class Theme {
 			loadedThemes.add(f.getName());
 		}
 
-		System.out.println("Loaded " + loadedThemes.size() + " Themes.");
+		Debug.Info("Loaded " + loadedThemes.size() + " Themes.");
 	}
 
 	public static final String[] RequiredDefaultEditorKeys = { "keyword", "access-modifier", "datatype", "symbols",

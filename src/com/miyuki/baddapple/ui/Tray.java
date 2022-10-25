@@ -1,6 +1,7 @@
 package com.miyuki.baddapple.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -102,12 +103,17 @@ public class Tray extends JPanel {
 						i.SetSelected(false);
 					}
 					
-					Dimension leftSize = BadApple.Get.mainSplitPanel.getLeftComponent().getSize();
+					Component componentThere = BadApple.Get.mainSplitPanel.getLeftComponent();
+					if (componentThere instanceof View) {
+						((View) componentThere).OnRelease();
+						System.gc();
+					}
+					
+					Dimension leftSize = componentThere.getSize();
 					
 					targetView.setPreferredSize(leftSize);
-					
+					targetView.OnInit();
 					BadApple.Get.mainSplitPanel.setLeftComponent(targetView);
-					
 					SetSelected(true);
 				}
 			});
