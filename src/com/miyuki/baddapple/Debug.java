@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 public class Debug {
 
 	private static boolean CaptureSTD = false;
+	public static boolean HadErrors = false;
 	public static String LastLine;
 	public static String CapturedBuffer;
 
@@ -24,6 +25,7 @@ public class Debug {
 	/**Prints out an error message.*/
 	public static void Error(String msg) {
 		PrintOut(GetMessage("ERROR", msg));
+		HadErrors = true;
 	}
 	
 	private static void PrintOut(String a) {

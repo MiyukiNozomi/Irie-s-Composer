@@ -6,6 +6,8 @@ import java.awt.Font;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.miyuki.baddapple.Language;
 import com.miyuki.baddapple.Resource;
@@ -24,9 +26,28 @@ public class ConsolePanel extends JPanel {
 		tabPanel = new TabPanel();
 		setLayout(new BorderLayout(0, 0));
 		
-		tabPanel.tabbedPanel.addTab("Console.1", new TerminalPanel());
+		tabPanel.tabbedPanel.addTab("+",  new JLabel("You're not supposed to be able to open this tab."));
+		tabPanel.tabbedPanel.addTab("Console." + tabPanel.tabbedPanel.getTabCount(), new TerminalPanel());
+		tabPanel.tabbedPanel.setSelectedIndex(1);
+		
+		tabPanel.tabbedPanel.addChangeListener(new ChangeListener() {	
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				int index = tabPanel.tabbedPanel.getSelectedIndex();
+				if (tabPanel.tabbedPanel.getTitleAt(index).matches("\\+")) {
+					AddConsoleTab();
+				}
+			}
+		});
+		
+		tabPanel.tabbedPanel.setSelectedIndex(0);
 		
 		add(tabPanel);
+	}
+	
+	public void AddConsoleTab() {
+		tabPanel.tabbedPanel.addTab("Console." + tabPanel.tabbedPanel.getTabCount(), new TerminalPanel());
+		tabPanel.tabbedPanel.setSelectedIndex(tabPanel.tabbedPanel.getTabCount() - 1);
 	}
 	
 	public void ShowMinimized() {

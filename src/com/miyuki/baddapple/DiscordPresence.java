@@ -41,7 +41,9 @@ public class DiscordPresence {
 	
 	@SuppressWarnings("static-access")
 	public static final void Reset() {
-		String state = "Huh, Discord RPC doesn't supports Hiragana lol"; //なにですか
+		if (presence == null)
+			return;
+		String state = "Huh, Discord RPC doesn't supports Hiragana lol"; //
 
 		switch (new Random().nextInt(10)) {
 			case 1:

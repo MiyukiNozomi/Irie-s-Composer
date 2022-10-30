@@ -1,18 +1,15 @@
 package com.miyuki.baddapple.ui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
-import com.miyuki.baddapple.IconPack;
 import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.Theme;
 
@@ -23,32 +20,6 @@ public class UITabbedPane extends JTabbedPane {
 		setUI(new TabbedPaneUI());
 		
 		setFocusable(false);
-	}
-
-	@Override
-	public void addTab(String title, Component component) {
-		this.addTab(title, IconPack.current.fileIcon, component);
-	}
-
-	@Override
-	public void addTab(String title, Icon icon, Component component, String tip) {
-		this.addTab(title, icon, component);
-	}
-
-	@Override
-	public void addTab(String title, Icon icon, Component component) {
-		super.addTab(title, icon, component);
-
-		int index = super.indexOfComponent(component);
-		setSelectedIndex(index);
-		TabCompView view = new TabCompView(this, title, (ImageIcon) icon, component);
-
-		if (index == super.getSelectedIndex())
-			view.onShown();
-		else
-			view.onHide();
-
-		super.setTabComponentAt(index, view);
 	}
 
 	private static class TabbedPaneUI extends BasicTabbedPaneUI {

@@ -129,6 +129,23 @@ public class TerminalPanel extends JPanel {
 		}
 	}
 	
+	public void Release() {
+		try {
+			inputReader.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		try {
+			errReader.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		process.destroy();
+		
+		System.gc();
+	}
+	
 	protected class TerminalProtector extends DocumentFilter {
 		public int promptPosition;
 		public boolean enabled;

@@ -188,65 +188,73 @@ public class BadApple extends JFrame {
 		menuBar.add(mnEdit);	
 	}
 	
-	public static void main(String[] args) throws Exception {
-		Debug.CaptureSTD();
-		// TODO i should probably block this function
-		// from being used within modules
-		System.setOut(new StandardOut(System.out,"INFO"));
-		System.setErr(new StandardOut(System.err,"ERROR"));
-		
-		// i'm already printing this out earlier
-		// Debug.Info(ExecutionDir.getPath());
-		
-		// Initialize everything based off user settings
-		Settings settings = new Settings();
-		
-		Resource.Initialize(settings);
-		
-		Language.LoadLanguagePack(settings.language);
-		
-		Launcher launcher = new Launcher();
-		
-		Theme.current = new Theme(settings.theme);
-		// this looks cursed doesn't it?
-		// we don't need to look for other themes if the one we're going
-		// to use is already saved within the settings class.
-		
-		// TODO only search for themes when opening the settings page
-		Theme.LoadThemes();
-		
-		// icon packs are a old functionality of this program
-		// i never really finished them,
-		// but i should go back to them
-		IconPack.LoadIconPacks();
-		
-		UIHelper.InstallLAF();
-
-		BadApple badApple = new BadApple(settings);
-		
-		// i am only setting up the actual window here
-		// because of eclipse's WindowBuilder acting weird
-		// when the thing you're editing is bigger than the viewport.
-		badApple.setSize(800,600);
-		badApple.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		badApple.setLocationRelativeTo(null);
-		badApple.tabPanel.tabbedPanel.addTab(Language.GetKey("welcome-tab-title"), Resource.GetImageRecolored("internal://tray/whiteicon.png", Theme.GetColor("tab-close-color")), new WelcomePage());
+	public static void main(String[] args) {
+		Launcher launcher = null;
+		try {
+			Debug.CaptureSTD();
+			// TODO i should probably block this function
+			// from being used within modules
+			System.setOut(new StandardOut(System.out));
+			System.setErr(new ErrorSTD(System.err));
 			
-		badApple.handler.OnEnable();
-		badApple.sideTray.AddTrayIcon(new ModulesView());
-		
-		// yeah, we don't need to grab the last element of the lastWorkspaces array,
-		// its because settings already """sorts it""" when an element is added
-		if (settings.lastWorkspaces.size() > 0) {
-			File f = new File(settings.lastWorkspaces.get(0));
-			if (f.exists()) {
-				badApple.fileExplorerView.OnFolderOpeningRequest(f);
+			// i'm already printing this out earlier
+			// Debug.Info(ExecutionDir.getPath());
+			
+			// Initialize everything based off user settings
+			Settings settings = new Settings();
+			
+			Resource.Initialize(settings);
+			
+			Language.LoadLanguagePack(settings.language);
+			
+			launcher = new Launcher();
+			
+			Theme.current = new Theme(settings.theme);
+			// this looks cursed doesn't it?
+			// we don't need to look for other themes if the one we're going
+			// to use is already saved within the settings class.
+			
+			// TODO only search for themes when opening the settings page
+			Theme.LoadThemes();
+			
+			// icon packs are a old functionality of this program
+			// i never really finished them,
+			// but i should go back to them
+			IconPack.LoadIconPacks();
+			
+			UIHelper.InstallLAF();
+	
+			BadApple badApple = new BadApple(settings);
+			
+			// i am only setting up the actual window here
+			// because of eclipse's WindowBuilder acting weird
+			// when the thing you're editing is bigger than the viewport.
+			badApple.setSize(800,600);
+			badApple.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			badApple.setLocationRelativeTo(null);
+			badApple.tabPanel.tabbedPanel.addTab(Language.GetKey("welcome-tab-title"), Resource.GetImageRecolored("internal://tray/whiteicon.png", Theme.GetColor("tab-close-color")), new WelcomePage());
+				
+			badApple.handler.OnEnable();
+			badApple.sideTray.AddTrayIcon(new ModulesView());
+			
+			// yeah, we don't need to grab the last element of the lastWorkspaces array,
+			// its because settings already """sorts it""" when an element is added
+			if (settings.lastWorkspaces.size() > 0) {
+				File f = new File(settings.lastWorkspaces.get(0));
+				if (f.exists()) {
+					badApple.fileExplorerView.OnFolderOpeningRequest(f);
+				}
 			}
+			
+			// hide the launcher, show main window
+			badApple.setVisible(true);
+			Debug.StopCapture();
+			launcher.setVisible(false);
+		} catch(Exception err) {
+			Debug.HadErrors = true;
+			err.printStackTrace();
+			System.err.println("Bad Apple has Crashed!");
+			launcher.Render();
 		}
-		
-		// hide the launcher, show main window
-		badApple.setVisible(true);
-		Debug.StopCapture();
-		launcher.setVisible(false);
 	}
 }
