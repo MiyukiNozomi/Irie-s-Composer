@@ -1,4 +1,4 @@
-package com.miyuki.baddapple.ui;
+package com.miyuki.baddapple.ui.console;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import com.miyuki.baddapple.Language;
 import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.Theme;
+import com.miyuki.baddapple.ui.TabPanel;
 
 public class ConsolePanel extends JPanel {
 	private static final long serialVersionUID = 1394558923852L;
@@ -22,6 +23,8 @@ public class ConsolePanel extends JPanel {
 		setPreferredSize(new Dimension(10, 200));
 		tabPanel = new TabPanel();
 		setLayout(new BorderLayout(0, 0));
+		
+		tabPanel.tabbedPanel.addTab("Console.1", new TerminalPanel());
 		
 		add(tabPanel);
 	}

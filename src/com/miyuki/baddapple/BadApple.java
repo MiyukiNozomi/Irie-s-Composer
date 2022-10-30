@@ -17,11 +17,11 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import com.miyuki.baddapple.modules.ModuleHandler;
-import com.miyuki.baddapple.ui.ConsolePanel;
 import com.miyuki.baddapple.ui.TabPanel;
 import com.miyuki.baddapple.ui.Tray;
 import com.miyuki.baddapple.ui.UIHelper;
 import com.miyuki.baddapple.ui.UIMenuBar;
+import com.miyuki.baddapple.ui.console.ConsolePanel;
 import com.miyuki.baddapple.views.ModulesView;
 import com.miyuki.baddapple.views.explorer.FileExplorerView;
 
@@ -31,6 +31,12 @@ public class BadApple extends JFrame {
 	public static File ExecutionDir;
 	/**Actually this should be called "Debug-Build"*/
 	public static boolean DevelopmentEnvironment;
+	
+	public static BadApplePlatform Platform;
+	
+	public static enum BadApplePlatform {
+		Windows, Linux
+	}
 	
 	static {
 		try {
@@ -51,6 +57,10 @@ public class BadApple extends JFrame {
 				ExecutionDir = ExecutionDir.getParentFile();
 			}
 			Debug.Info("Execution Dir is : " + ExecutionDir);
+			if (System.getProperty("os.name").contains("Windows")) {
+				Platform = BadApplePlatform.Windows;
+			}
+			Debug.Info("Running on " + Platform);
 		} catch(Exception err) {
 			// never happens
 			err.printStackTrace();
@@ -66,11 +76,11 @@ public class BadApple extends JFrame {
 	public JSplitPane mainSplitPanel;
 	public Settings settings;
 	
-	JPanel contentPanel;
+	public JPanel contentPanel;
 	
-	JMenuBar menuBar;
-	ConsolePanel consolePanel;
-	FileExplorerView fileExplorerView;
+	public JMenuBar menuBar;
+	public ConsolePanel consolePanel;
+	public FileExplorerView fileExplorerView;
 	
 	BadApple(Settings settings) {
 		super("BadApple Studio");

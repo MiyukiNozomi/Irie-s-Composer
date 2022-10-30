@@ -13,22 +13,24 @@ package com.miyuki.baddapple.editor;
 
 public class Lexer {
 	public enum TokenType {
-		Identifier, Symbol, EndOfFile
+		Identifier, Number, Symbol, EndOfFile
 	}
 
 	public class Token {
-		String data;
-		TokenType type;
+		public int position;
+		public String data;
+		public TokenType type;
 
-		public Token(String data, TokenType type) {
+		public Token(String data, TokenType type, int position) {
 			this.data = data;
 			this.type = type;
+			this.position = position;
 		}
 	}
 
-	char current;
-	int position;
-	String rawData;
+	public char current;
+	public int position;
+	public String rawData;
 
 	public Lexer(String data) {
 		this.rawData = data;
@@ -36,7 +38,7 @@ public class Lexer {
 		this.NextChar();
 	}
 
-	char NextChar() {
+	public char NextChar() {
 		char last = current;
 		if (position >= rawData.length()) {
 			current = '\0';
@@ -46,13 +48,14 @@ public class Lexer {
 		return last;
 	}
 
-	Token NextToken() {
+	public Token NextToken() {
 		while (Character.isWhitespace(current) && current != '\0') {
 			NextChar();
 		}
 
+		int p = this.position;
 		if (current == '\0')
-			return new Token("", TokenType.EndOfFile);
+			return new Token("", TokenType.EndOfFile, p);
 
 		if (Character.isAlphabetic(current)) {
 			String acc = "";
@@ -60,12 +63,18 @@ public class Lexer {
 					&& current != '\0') {
 				acc += NextChar();
 			}
-			return new Token(acc, TokenType.Identifier);
+			return new Token(acc, TokenType.Identifier, p);
+		}
+		
+		if (Character.isDigit(current)) {
+			String acc = "";
+			while (Character.isDigit(current) && current != '\0') {
+				acc += NextChar();
+			}
+			return new Token(acc, TokenType.Number, p);
 		}
 
 		// must be a symbol
-		
-		return new Token(current + "", TokenType.Symbol);
+		return new Token(NextChar() + "", TokenType.Symbol, p);
 	}
-
 }

@@ -45,14 +45,14 @@ public class HighlightEngine extends DefaultStyledDocument {
 	 * use GetLexer() instead.
 	 * */
 	@Deprecated
-	protected List<Token> GetTokens() {
+	protected List<LegacyToken> GetTokens() {
 		String content = "";
 		try {
 			content = getText(0, getLength()) + " ";
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
-		List<Token> words = new ArrayList<Token>();
+		List<LegacyToken> words = new ArrayList<LegacyToken>();
 		int lastWhitespacePosition = 0;
 		String word = "";
 		char[] data = content.toCharArray();
@@ -63,7 +63,7 @@ public class HighlightEngine extends DefaultStyledDocument {
 				lastWhitespacePosition = index;
 				if (word.length() > 0) {
 
-					words.add(new Token(word, (lastWhitespacePosition - word.length())));
+					words.add(new LegacyToken(word, (lastWhitespacePosition - word.length())));
 
 					word = "";
 				}
@@ -80,12 +80,12 @@ public class HighlightEngine extends DefaultStyledDocument {
 	 * Ineffective Lexer. 
 	 */
 	@Deprecated
-	public static class Token {
+	public static class LegacyToken {
 
 		public int position;
 		public String word;
 
-		public Token(String word, int position) {
+		public LegacyToken(String word, int position) {
 			this.position = position;
 			this.word = word;
 		}

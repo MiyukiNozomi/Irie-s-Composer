@@ -16,6 +16,7 @@ public class Settings {
 	public JSONObject rawSettings;
 	public String language;
 	public String theme;
+	public String terminalEmulator;
 	public int editorFontsize;
 	public List<String> lastWorkspaces;
 	
@@ -25,6 +26,12 @@ public class Settings {
 		lastWorkspaces = new ArrayList<String>();
 		theme = "internal://tokyoNightDark.json";
 		language = "english";
+		
+		if (System.getProperty("os.name").contains("Windows"))
+			terminalEmulator = "cmd";
+		else
+			terminalEmulator = "bash";
+		
 		editorFontsize = 14;
 		
 		if (!SettingsFile.exists() || !SettingsFile.isFile()) {
@@ -38,6 +45,9 @@ public class Settings {
 			System.err.println("Failed to load settings file: ");
 			e.printStackTrace();
 			return;
+		}
+		if (rawSettings.containsKey("terminal-emulator")) {
+			terminalEmulator = (String)rawSettings.get("terminal-emulator");
 		}
 		
 		if (rawSettings.containsKey("theme")) {
@@ -69,6 +79,7 @@ public class Settings {
 			writer.write("{\n");
 			writer.write("\t\"theme\":\"" + theme + "\",\n");
 			writer.write("\t\"language\":\"" + language + "\",\n");
+			writer.write("\t\"terminal-emulator\":\"" + terminalEmulator + "\",\n");
 			writer.write("\t\"editor-fontsize\":\"" + editorFontsize + "\",\n");
 			writer.write("\t\"last-workspaces\": [\n");
 			

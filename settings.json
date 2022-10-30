@@ -1,6 +1,7 @@
 {
 	"theme":"internal://tokyoNightDark.json",
 	"language":"english",
+	"terminal-emulator":"cmd",
 	"editor-fontsize":"14",
 	"last-workspaces": [
 		"C:/Users/Shinoa Hiragi/Desktop/TheShinoaFiles/Projects/LearnHAXE",

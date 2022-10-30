@@ -33,7 +33,7 @@ public class ExplorerPopup extends JPopupMenu {
 
 		JMenuItem mntmNewFolder = new JMenuItem(Language.GetKey("file-explorer-popup-newfolder"));
 		mntmNewFolder.setIcon(IconPack.current.folderIcon);
-
+		
 		mntmNewFolder.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -56,6 +56,8 @@ public class ExplorerPopup extends JPopupMenu {
 
 				if (target != null) {
 					String name = JOptionPane.showInputDialog(Language.GetKey("new-folder-popup-message"));
+					if (name == null)
+						return;
 					File newFolder = new File(target.getPath() + File.separator + name);
 					if (!newFolder.mkdir()) {
 						JOptionPane.showMessageDialog(BadApple.Get, Language.GetKey("new-folder-popup-fail"), name, JOptionPane.WARNING_MESSAGE);
@@ -93,6 +95,8 @@ public class ExplorerPopup extends JPopupMenu {
 
 				if (target != null) {
 					String name = JOptionPane.showInputDialog(Language.GetKey("new-file-popup-message"));
+					if (name == null)
+						return;
 					try {
 						Files.write(Paths.get(target.getPath() + File.separator + name), "".getBytes());
 						selectedNode.add(new ExplorerTreeNode(new File(target.getPath() + File.separator + name)));
