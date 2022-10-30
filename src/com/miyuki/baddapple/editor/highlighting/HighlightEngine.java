@@ -110,16 +110,23 @@ public class HighlightEngine extends DefaultStyledDocument {
 	}
 
 	public void RequestCompletion(Editor e) {
+		// regex to only grab words
 		String regex = "([^a-zA-Z']+)'*\\1*";
+		// split that thing by the regex
 		String[] split = getText().split(regex);
+		
+		// turn it into a list, remove duplicates
 		List<String> words = Arrays.asList(split);
 		List<String> withoutDuplicates = words.stream().distinct().collect(Collectors.toList());
+		
+		// now turn it into Completion Suggestions
 		List<CompletionSuggestion> suggestions = new ArrayList<>();
 
 		for (String s : withoutDuplicates) {
 			suggestions.add(new CompletionSuggestion(CompletionType.Word, s, s));
 		}
 
+		// send it to the auto complete window.
 		e.autoComplete.words = suggestions;
 	}
 }

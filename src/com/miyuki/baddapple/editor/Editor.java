@@ -179,8 +179,10 @@ public class Editor extends JPanel {
 			ext = ext.substring(ext.indexOf(".") + 1);
 			Debug.Info("Its extension is: " + ext);
 			HighlightEngine engine = Registry.GetEngineFor(ext);
-			if (engine != null)
+			if (engine != null) {
 				document.setDocument(engine);
+				((AbstractDocument) document.getDocument()).setDocumentFilter(new TabSpacingFilter());
+			}
 		}
 		saved = true;
 		document.setText(Resource.GetFile(f.getPath()));

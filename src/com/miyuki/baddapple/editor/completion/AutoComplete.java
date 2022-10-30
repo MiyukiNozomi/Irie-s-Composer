@@ -118,7 +118,7 @@ public class AutoComplete extends JPopupMenu {
 				
 				// TODO i should probably allow extensions to add their own Key Strokes.
 				
-				/*
+				
 				final int position = textpane.getCaretPosition();
 				if (e.getKeyCode() == KeyEvent.VK_UP
 						|| e.getKeyCode() == KeyEvent.VK_DOWN) {
@@ -141,7 +141,12 @@ public class AutoComplete extends JPopupMenu {
 					setVisible(false);
 					isShow = false;
 					return;
-				} else if (Character.isLetterOrDigit(e.getKeyChar())) {
+				} else {
+					word.delete(0, word.length());
+					model.clear();
+					setVisible(false);
+					isShow = false;
+				}/* else if (Character.isLetterOrDigit(e.getKeyChar())) {
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
@@ -161,12 +166,7 @@ public class AutoComplete extends JPopupMenu {
 							}
 						}
 					});
-				} else {
-					word.delete(0, word.length());
-					model.clear();
-					setVisible(false);
-					isShow = false;
-				}*/
+				*/
 			}
 
 			@Override
