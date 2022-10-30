@@ -5,7 +5,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,6 +12,10 @@ import java.io.OutputStreamWriter;
 
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 
 import com.miyuki.baddapple.BadApple;
 import com.miyuki.baddapple.Debug;
@@ -26,9 +29,10 @@ public class TerminalPanel extends JPanel {
 
 	public Process process;
 	public Thread inputReader, errReader;
-
+	
 	public boolean terminalReleased;
 
+	protected TerminalProtector protector;
 	protected BufferedWriter stdin;
 	protected JTextPane panel;
 
@@ -47,6 +51,10 @@ public class TerminalPanel extends JPanel {
 		panel.setSelectedTextColor(Theme.GetColor("panel-background"));
 		panel.setSelectionColor(Theme.GetColor("panel-foreground"));
 		panel.setFont(Resource.editorFont);
+		
+		protector = new TerminalProtector();
+		
+		((AbstractDocument) panel.getDocument()).setDocumentFilter(protector);
 
 		add(UIHelper.ManufactureScroll(panel), BorderLayout.CENTER);
 		try {
@@ -79,6 +87,8 @@ public class TerminalPanel extends JPanel {
 				stdin.flush();
 				return;
 			}
+			// yeah, i shouldn't really need to do this. but sure.
+			this.panel.setText(this.panel.getText() + e.getKeyChar());
 			stdin.write(e.getKeyChar());
 			stdin.flush();
 		} catch (IOException e1) {
@@ -101,11 +111,52 @@ public class TerminalPanel extends JPanel {
 		public void run() {
 			while (!panel.terminalReleased) {
 				try {
-					this.panel.panel.setText(this.panel.panel.getText() + ((char)reader.read()));
+					int i = reader.read();
+					char c = (char) i;
+					
+					//TODO support cls
+					// and fix the weird bugs
+					this.panel.panel.setText(this.panel.panel.getText() + c);
+					
+					int position = this.panel.panel.getText().length() - 1;
+					// move caret to end of stream.
+					//this.panel.panel.setCaretPosition(position);
+					this.panel.protector.promptPosition = position;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 		}
+	}
+	
+	protected class TerminalProtector extends DocumentFilter {
+		public int promptPosition;
+		public boolean enabled;
+		
+	    public void insertString(final FilterBypass fb, final int offset, final String string, final AttributeSet attr)
+	            throws BadLocationException {
+	        if (!enabled)
+	            super.insertString(fb, offset, string, attr);
+	        
+	    	if (offset >= promptPosition) {
+	            super.insertString(fb, offset, string, attr);
+	        }
+	    }
+
+	    public void remove(final FilterBypass fb, final int offset, final int length) throws BadLocationException {
+	    	 if (!enabled)
+		           super.remove(fb, offset, length);
+		        
+	    	if (offset >= promptPosition) {
+	            super.remove(fb, offset, length);
+	        }
+	    }
+
+	    public void replace(final FilterBypass fb, final int offset, final int length, final String text, final AttributeSet attrs)
+	            throws BadLocationException {
+	        if (offset >= promptPosition) {
+	            super.replace(fb, offset, length, text, attrs);
+	        }
+	    }
 	}
 }
