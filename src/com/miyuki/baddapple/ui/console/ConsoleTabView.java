@@ -1,4 +1,4 @@
-package com.miyuki.baddapple.ui;
+package com.miyuki.baddapple.ui.console;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -13,13 +13,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import com.miyuki.baddapple.Debug;
 import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.Theme;
 
-public class TabCompView extends JPanel {
+public class ConsoleTabView extends JPanel {
 	private static final long serialVersionUID = 1L;
-	
-	public static Font titleFont = Resource.DeriveMainFont(Font.PLAIN, 12);
 	
 	public JLabel titleLbl;
 	public JLabel closeButton;
@@ -27,7 +26,7 @@ public class TabCompView extends JPanel {
 	
 	public boolean closeable = true;
 
-	public TabCompView(final JTabbedPane tabbedPane, String title, ImageIcon icon, final Component arg2) {
+	public ConsoleTabView(final JTabbedPane tabbedPane, String title, ImageIcon icon, Component arg2) {
 		setOpaque(false);
 		setLayout(new BorderLayout());
 		setMinimumSize(new Dimension(123, 29));
@@ -38,7 +37,7 @@ public class TabCompView extends JPanel {
 		titleLbl.setMinimumSize(new Dimension(123, 29));
 		titleLbl.setPreferredSize(new Dimension(123, 29));
 		titleLbl.setIcon(Resource.Resize(icon, 16));
-		titleLbl.setFont(titleFont); 
+		titleLbl.setFont(Resource.DeriveMainFont(Font.PLAIN, 12)); 
 		titleLbl.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -55,6 +54,7 @@ public class TabCompView extends JPanel {
 		closeButton = new JLabel(Resource.GetImageRecolored("internal://delete.png", Theme.GetColor("tab-close-color")));
 		closeButton.setHorizontalAlignment(JLabel.CENTER);
 		closeButton.setVerticalAlignment(JLabel.CENTER);
+		closeButton.setFont(new Font("Dialog",Font.BOLD,14));
 		closeButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -62,6 +62,10 @@ public class TabCompView extends JPanel {
 					return;
 				if (e.getButton() != MouseEvent.BUTTON1)
 					return;
+				Debug.Info("Killing Terminal");
+				if (arg2 instanceof TerminalPanel)
+					((TerminalPanel)arg2).Release();
+				Debug.Info("Terminal Killed");
 				tabbedPane.remove(arg2);
 			}
 		});

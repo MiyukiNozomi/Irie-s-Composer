@@ -6,48 +6,53 @@ import java.awt.Font;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import com.miyuki.baddapple.Language;
 import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.Theme;
-import com.miyuki.baddapple.ui.TabPanel;
 
 public class ConsolePanel extends JPanel {
 	private static final long serialVersionUID = 1394558923852L;
 	
 	public boolean minimized = true;
 	public JLabel maximizeLabel;
-	public TabPanel tabPanel;
+	public ConsoleTabbedPane tabPanel;
 	
 	public ConsolePanel() {
 		setPreferredSize(new Dimension(10, 200));
-		tabPanel = new TabPanel();
+		tabPanel = new ConsoleTabbedPane();
 		setLayout(new BorderLayout(0, 0));
+
+		JLabel errorLabel = new JLabel("You're not supposed to be able to open this tab.");
+		errorLabel.setHorizontalAlignment(JLabel.CENTER);
+		tabPanel.addTab("+",  errorLabel);
+		tabPanel.setTabComponentAt(0, new AddConsoleView());
+
+		AddConsoleTab();
 		
-		tabPanel.tabbedPanel.addTab("+",  new JLabel("You're not supposed to be able to open this tab."));
-		tabPanel.tabbedPanel.addTab("Console." + tabPanel.tabbedPanel.getTabCount(), new TerminalPanel());
-		tabPanel.tabbedPanel.setSelectedIndex(1);
-		
-		tabPanel.tabbedPanel.addChangeListener(new ChangeListener() {	
+		/* how to make a memory leak in java:
+		 * I had to comment out this because for some reason
+		 * this generates a memory leak when closing a tab from the ConsoleTabView class.
+		 * 
+		tabPanel.addChangeListener(new ChangeListener() {	
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				int index = tabPanel.tabbedPanel.getSelectedIndex();
-				if (tabPanel.tabbedPanel.getTitleAt(index).matches("\\+")) {
+				int index = tabPanel.getSelectedIndex();
+				System.out.println("New Tab");
+				if (tabPanel.getTitleAt(index).matches("\\+")) {
 					AddConsoleTab();
 				}
 			}
-		});
+		});*/
 		
-		tabPanel.tabbedPanel.setSelectedIndex(0);
+		tabPanel.setSelectedIndex(0);
 		
 		add(tabPanel);
 	}
 	
 	public void AddConsoleTab() {
-		tabPanel.tabbedPanel.addTab("Console." + tabPanel.tabbedPanel.getTabCount(), new TerminalPanel());
-		tabPanel.tabbedPanel.setSelectedIndex(tabPanel.tabbedPanel.getTabCount() - 1);
+		int tabCount = tabPanel.getTabCount();
+		tabPanel.insertTab("Console." + tabPanel.getTabCount(), Resource.GetImageRecolored("internal://console.png", Theme.GetColor("explorer-icons")), new TerminalPanel(), "Console", tabCount - 1);
 	}
 	
 	public void ShowMinimized() {

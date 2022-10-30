@@ -22,13 +22,13 @@ and you should be good to go!
 
 Here's how your main file will look like
 ```java
-package com.miyuki.examplemod;
+package com.miyuki.haxe;
 
 import com.miyuki.baddapple.modules.BadAppleModule;
 import com.miyuki.baddapple.modules.Character;
 
-@Character(name = "MyModule", description="My first module!")
-public class ExampleMod extends BadAppleModule {
+@Character(name = "HAXE Support", description="HAXE Support for Bad Apple!", iconPath = "icon.png")
+public class HAXE extends BadAppleModule {
 
 	// Use this for initialization
 	@Override
@@ -50,12 +50,12 @@ while onAwake and onQuit provides us with our initialization and release functio
 
 Now, compile your project and you should see on the Debug Console a nice little message:
 ```
-11:29:03 [INFO] com.miyuki.examplemod.ExampleMod > Yeeey its initializing!
+11:29:03 [INFO] com.miyuki.haxe.HAXE > Yeeey its initializing!
 ```
 Also, if you open up the Module tab on the tray bar, you should see your custom module right there.
 Now, if you close up bad apple you should see your onQuit message! 
 ```
-11:29:45 [INFO] com.miyuki.examplemod.ExampleMod > Oh no, its closing up!
+11:29:45 [INFO] com.miyuki.haxe.HAXE > Oh no, its closing up!
 ```
 
 ## I don't like the default icon, is there a way to change?

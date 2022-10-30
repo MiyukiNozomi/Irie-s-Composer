@@ -1,8 +1,0 @@
-STDOUT 13:21:04 [ERROR] java.lang.Throwable$WrappedPrintStream > java.lang.IndexOutOfBoundsException: Index: 2, Tab count: 2
-STDOUT 13:21:04 [ERROR] java.lang.Throwable$WrappedPrintStream > 	at javax.swing.JTabbedPane.checkIndex(JTabbedPane.java:1768)
-STDOUT 13:21:04 [ERROR] java.lang.Throwable$WrappedPrintStream > 	at javax.swing.JTabbedPane.setSelectedIndex(JTabbedPane.java:589)
-STDOUT 13:21:04 [ERROR] java.lang.Throwable$WrappedPrintStream > 	at com.miyuki.baddapple.ui.console.ConsolePanel.AddConsoleTab(ConsolePanel.java:49)
-STDOUT 13:21:04 [ERROR] java.lang.Throwable$WrappedPrintStream > 	at com.miyuki.baddapple.ui.console.ConsolePanel.<init>(ConsolePanel.java:30)
-STDOUT 13:21:04 [ERROR] java.lang.Throwable$WrappedPrintStream > 	at com.miyuki.baddapple.BadApple.<init>(BadApple.java:131)
-STDOUT 13:21:04 [ERROR] java.lang.Throwable$WrappedPrintStream > 	at com.miyuki.baddapple.BadApple.main(BadApple.java:227)
-STDOUT 13:21:04 [ERROR] com.miyuki.baddapple.BadApple > Bad Apple has Crashed!
