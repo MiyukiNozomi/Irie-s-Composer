@@ -2,7 +2,7 @@ package com.miyuki.baddapple;
 
 import java.util.HashMap;
 
-import com.miyuki.baddapple.editor.HighlightEngine;
+import com.miyuki.baddapple.editor.highlighting.HighlightEngine;
 
 public class Registry {
 

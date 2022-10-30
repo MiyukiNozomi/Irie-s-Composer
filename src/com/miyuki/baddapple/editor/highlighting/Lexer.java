@@ -1,4 +1,4 @@
-package com.miyuki.baddapple.editor;
+package com.miyuki.baddapple.editor.highlighting;
 
 /**
  * a lexer for Non-RegexHighlightEngine based hightlighing engines why did i

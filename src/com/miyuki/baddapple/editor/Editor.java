@@ -8,10 +8,6 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -22,42 +18,54 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.text.AbstractDocument;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoManager;
 
 import com.miyuki.baddapple.BadApple;
 import com.miyuki.baddapple.Debug;
 import com.miyuki.baddapple.Registry;
 import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.Theme;
-import com.miyuki.baddapple.editor.CompletionSuggestion.CompletionType;
+import com.miyuki.baddapple.editor.completion.AutoClose;
+import com.miyuki.baddapple.editor.completion.AutoComplete;
+import com.miyuki.baddapple.editor.highlighting.HighlightEngine;
 import com.miyuki.baddapple.ui.TabCompView;
 import com.miyuki.baddapple.ui.UIHelper;
 
 public class Editor extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	public File targetFile;
+	public boolean saved = true;
 	
+	public File targetFile;
+
 	public JTextPane document;
 	public JScrollPane scrollPane;
 	public LineNumbers lineNumbers;
 	public LinePainter linePainter;
 	public AutoComplete autoComplete;
+	public UndoManager undoManager;
 
 	public Editor() {
 		document = new NoWrapJTextPane();
 		document.addKeyListener(new AutoClose(document));
+
+		document.setEditorKit(new BaseEditorKit());
 		document.setDocument(new HighlightEngine());
+		
 		document.setBorder(BorderFactory.createEmptyBorder());
 		document.setFont(Resource.editorFont);
-		document.setEditorKit(new BaseEditorKit());
 		document.setSelectionColor(Theme.GetColor("editor-selection"));
 		document.setSelectedTextColor(Theme.GetColor("editor-foreground"));
 		document.setCaretColor(Theme.GetColor("editor-caret"));
 		document.setForeground(Theme.GetColor("editor-foreground"));
 		document.setBackground(Theme.GetColor("editor-background"));
-		
+
+		undoManager = new UndoManager();
+		document.getDocument().addUndoableEditListener(undoManager);
+
 		autoComplete = new AutoComplete(document);
-		
+
 		document.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN) {
@@ -67,22 +75,14 @@ public class Editor extends JPanel {
 					return;
 				}
 				if (e.getKeyCode() != KeyEvent.VK_LEFT && e.getKeyCode() != KeyEvent.VK_RIGHT) {
-					BadApple.Get.tabPanel.SetTitleAt(Editor.this, "*"+targetFile.getName());	
-					String regex = "([^a-zA-Z']+)'*\\1*";
-					String[] split = document.getText().split(regex);
-					List<String> words = Arrays.asList(split);
-			        List<String> withoutDuplicates = words.stream().distinct().collect(Collectors.toList());
-			        List<CompletionSuggestion> suggestions = new ArrayList<>();
-			        
-			        for(String s : withoutDuplicates) {
-			        	suggestions.add(new CompletionSuggestion(CompletionType.Word, s, s));
-			        }
-			        
-					autoComplete.words = suggestions;
+					if (saved) {
+						BadApple.Get.tabPanel.SetTitleAt(Editor.this, "*" + targetFile.getName());
+						saved = false;
+					}
 				}
 			}
 		});
-		
+
 		linePainter = new LinePainter(document);
 
 		((AbstractDocument) document.getDocument()).setDocumentFilter(new TabSpacingFilter());
@@ -94,16 +94,12 @@ public class Editor extends JPanel {
 
 		setLayout(new BorderLayout());
 		add(scrollPane, BorderLayout.CENTER);
-		
+
 		DoStrokes();
 	}
 
-
 	private void DoStrokes() {
-		KeyStroke save = KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK);
-
-		document.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(save, "saveKeyStroke");
-		document.getActionMap().put("saveKeyStroke", new AbstractAction() {
+		MakeStrokes(KeyEvent.VK_S, "saveKeyStroke", new AbstractAction() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -111,8 +107,54 @@ public class Editor extends JPanel {
 				SaveFile();
 			}
 		});
+		MakeStrokes(KeyEvent.VK_Z, "undoKeyStroke", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if (undoManager.canUndo())
+						undoManager.undo();
+					else
+						Debug.Info("Cannot Undo!");
+				} catch (CannotUndoException err) {
+					Debug.Info("Cannot Undo!");
+				}
+			}
+		});
+		MakeStrokes(KeyEvent.VK_Y, "redoKeyStroke", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if (undoManager.canRedo())
+						undoManager.redo();
+					else
+						Debug.Info("Cannot Redo!");
+				} catch (CannotUndoException err) {
+					Debug.Info("Cannot Redo!");
+				}
+			}
+		});
+		MakeStrokes(KeyEvent.VK_SPACE, "autoCompleteKeyStroke", new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				((HighlightEngine) document.getDocument()).RequestCompletion(Editor.this);
+				autoComplete.RequestShow();
+			}
+		});
 	}
-	
+
+	private void MakeStrokes(int key, String name, AbstractAction action) {
+		KeyStroke stroke = KeyStroke.getKeyStroke(key, Event.CTRL_MASK);
+
+		document.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, name);
+		document.getActionMap().put(name, action);
+	}
+
 	public void SaveFile() {
 		try {
 			if (targetFile == null)
@@ -120,17 +162,18 @@ public class Editor extends JPanel {
 			Files.write(Paths.get(targetFile.getPath()), document.getText().getBytes());
 			Debug.Info("Successfully saved file!");
 			// detail.setText("Saved!");
-			//Footer.GetInstance().getLineAndColumnLbl().setText("Saved!");
+			// Footer.GetInstance().getLineAndColumnLbl().setText("Saved!");
 			BadApple.Get.tabPanel.SetTitleAt(this, targetFile.getName());
+			saved = true;
 		} catch (Exception e) {
 			Debug.Error("Unable to save file: " + targetFile.getPath());
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void OpenFile(File f) {
 		this.targetFile = f;
-		
+
 		String ext = f.getName();
 		if (ext.indexOf(".") != -1) {
 			ext = ext.substring(ext.indexOf(".") + 1);
@@ -139,12 +182,16 @@ public class Editor extends JPanel {
 			if (engine != null)
 				document.setDocument(engine);
 		}
-		
+		saved = true;
 		document.setText(Resource.GetFile(f.getPath()));
+		
+		// resetting it
+		undoManager.discardAllEdits();
+		
 		JTabbedPane p = BadApple.Get.tabPanel.tabbedPanel;
 		int index = p.indexOfComponent(this);
 		TabCompView view = (TabCompView) p.getTabComponentAt(index);
-		
+
 		p.setTitleAt(index, f.getName());
 		view.titleLbl.setText(f.getName());
 	}

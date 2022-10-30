@@ -1,4 +1,4 @@
-package com.miyuki.baddapple.editor;
+package com.miyuki.baddapple.editor.completion;
 
 import java.awt.Component;
 import java.awt.Point;
@@ -23,9 +23,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.text.BadLocationException;
 
+import com.miyuki.baddapple.Debug;
 import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.Theme;
-import com.miyuki.baddapple.editor.CompletionSuggestion.CompletionType;
+import com.miyuki.baddapple.editor.completion.CompletionSuggestion.CompletionType;
 
 public class AutoComplete extends JPopupMenu {
 	private static final long serialVersionUID = 1L;
@@ -105,6 +106,19 @@ public class AutoComplete extends JPopupMenu {
 		textpane.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
+				// TODO turn this into a setting: Can Show Autocomplete on key type:
+				
+				// i've temporary removed this because it forces the Modules to reload their parsers
+				// which is something that could be problematic on low end PCs.
+				// so, until i find a better way to deal with this i'll just leave 
+				// auto completion to be only fired if Control+Space is pressed.
+				
+				// TODO i should probably not hardcode keyStrokes and actually allow
+				// custom key strokes.
+				
+				// TODO i should probably allow extensions to add their own Key Strokes.
+				
+				/*
 				final int position = textpane.getCaretPosition();
 				if (e.getKeyCode() == KeyEvent.VK_UP
 						|| e.getKeyCode() == KeyEvent.VK_DOWN) {
@@ -152,7 +166,7 @@ public class AutoComplete extends JPopupMenu {
 					model.clear();
 					setVisible(false);
 					isShow = false;
-				}
+				}*/
 			}
 
 			@Override
@@ -211,7 +225,8 @@ public class AutoComplete extends JPopupMenu {
 			}
 		});
 	}
-
+	// i don't need this method anymore, but i'll still leave it. check comment on line 109
+	/*
 	private String getWord(int index) {
 		if (index < 0) {
 			return "";
@@ -233,7 +248,7 @@ public class AutoComplete extends JPopupMenu {
 		}
 		br.reverse();
 		return br.toString();
-	}
+	}*/
 
 	public CompletionSuggestion[] Search(String text) {
 		
@@ -291,5 +306,62 @@ public class AutoComplete extends JPopupMenu {
 			return (String) list.getSelectedValue().content;
 		}
 		return "";
+	}
+
+	public void RequestShow() {
+		word.delete(0, word.length());
+		int position = textpane.getCaretPosition();
+		
+		if (textpane.getText().trim().length() == 0 || position == 0) {
+			return;
+		}
+		
+		String text = textpane.getText();
+		
+		String query = "";
+
+		// modify it so that we'll start from the current character
+		position = position - 1;
+		
+		// i'm not really sure how this happens,
+		// but in some machines it seems that the caret position
+		// goes outside of the text's length. which doesn't makes too much sense..
+		if (position > text.length()) {
+			Debug.Warn("what the hell! the caret position is outside text length!");
+			Debug.Info("Text Length:" + text.length() + " Caret Position: " + position);
+			return;
+		}
+		
+		for (int i = position; i > 0; i--) {
+			char c = text.charAt(i);
+			
+			if (Character.isWhitespace(c))
+				break;
+			
+			// add it to start of string.
+			query = c + query;
+		}
+		
+		System.out.println("AutoCompletion Query: " + query);
+		
+		if (query == "")
+			return;
+		
+		word.append(query);
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				if (word.length() >= 2) {
+					model.clear();
+					if (!UpdateWordList()) {
+						setVisible(false);
+						isShow = false;
+						return;
+					}
+					isShow = true;
+					ShowPanel();
+				}
+			}
+		});
 	}
 }

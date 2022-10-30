@@ -1,13 +1,18 @@
-package com.miyuki.baddapple.editor;
+package com.miyuki.baddapple.editor.highlighting;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 
 import com.miyuki.baddapple.Theme;
+import com.miyuki.baddapple.editor.Editor;
+import com.miyuki.baddapple.editor.completion.CompletionSuggestion;
+import com.miyuki.baddapple.editor.completion.CompletionSuggestion.CompletionType;
 
 public class HighlightEngine extends DefaultStyledDocument {
 	private static final long serialVersionUID = -1915896951381L;
@@ -102,5 +107,19 @@ public class HighlightEngine extends DefaultStyledDocument {
 			e.printStackTrace();
 			return "";
 		}
+	}
+
+	public void RequestCompletion(Editor e) {
+		String regex = "([^a-zA-Z']+)'*\\1*";
+		String[] split = getText().split(regex);
+		List<String> words = Arrays.asList(split);
+		List<String> withoutDuplicates = words.stream().distinct().collect(Collectors.toList());
+		List<CompletionSuggestion> suggestions = new ArrayList<>();
+
+		for (String s : withoutDuplicates) {
+			suggestions.add(new CompletionSuggestion(CompletionType.Word, s, s));
+		}
+
+		e.autoComplete.words = suggestions;
 	}
 }

@@ -1,4 +1,4 @@
-package com.miyuki.baddapple.editor;
+package com.miyuki.baddapple.editor.completion;
 
 public class CompletionSuggestion {
 

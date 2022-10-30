@@ -184,6 +184,16 @@ public class ExplorerPopup extends JPopupMenu {
 				}
 			}
 		});
+		
+		JMenuItem mntmRename = new JMenuItem(Language.GetKey("file-explorer-popup-rename"));
+		mntmRename.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//TODO implement me!
+			}
+		});
+		add(mntmRename);
+		
 		add(mntmDelete);
 		
 		JMenu mnNewMenu = new JMenu(Language.GetKey("file-explorer-popup-showin"));

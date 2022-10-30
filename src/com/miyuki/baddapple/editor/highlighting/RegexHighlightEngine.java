@@ -1,4 +1,4 @@
-package com.miyuki.baddapple.editor;
+package com.miyuki.baddapple.editor.highlighting;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

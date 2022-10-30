@@ -1,4 +1,4 @@
-package com.miyuki.baddapple.editor;
+package com.miyuki.baddapple.editor.completion;
 
 
 import java.awt.event.ActionEvent;
