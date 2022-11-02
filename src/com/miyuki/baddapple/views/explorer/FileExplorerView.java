@@ -131,7 +131,7 @@ public class FileExplorerView extends View {
 		root = new ExplorerTreeNode(f);
 		treeModel = new DefaultTreeModel(root);
 		tree.setModel(treeModel);
-		CreateChildNodes ccn = new CreateChildNodes(this.tree, f, root);
+		CreateChildNodes ccn = new CreateChildNodes(f, root);
 		thread = new Thread(ccn);
 		thread.start();
 
