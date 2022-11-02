@@ -50,5 +50,8 @@
 	
 	"settings-editor-fontsize": "Font Size",
 	
-	"settings-page-select": "Click on an option on the left side."
+	"settings-page-select": "Click on an option on the left side.",
+	
+	"error-title": "Error!",	
+	"error-opening": "Failed to open: %F%"
 }

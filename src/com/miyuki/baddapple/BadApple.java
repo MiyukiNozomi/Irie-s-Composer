@@ -250,7 +250,7 @@ public class BadApple extends JFrame {
 			badApple.setVisible(true);
 			Debug.StopCapture();
 			launcher.setVisible(false);
-		} catch(Exception err) {
+		} catch(Throwable err) {
 			Debug.HadErrors = true;
 			err.printStackTrace();
 			System.err.println("Bad Apple has Crashed!");

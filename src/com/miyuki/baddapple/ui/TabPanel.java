@@ -76,7 +76,7 @@ public class TabPanel extends JPanel {
 				if (c instanceof Editor) {
 					DiscordPresence.SetCurrentFile(((Editor) c).targetFile,"Editing");
 				} else if (c instanceof ImageView) {
-					DiscordPresence.SetCurrentFile(((Editor) c).targetFile,"Viewing");
+					DiscordPresence.SetCurrentFile(((ImageView) c).targetFile,"Viewing");
 				} else {
 					DiscordPresence.Reset();
 				}

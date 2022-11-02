@@ -9,7 +9,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -68,37 +68,7 @@ public class FileExplorerView extends View {
 						return;
 
 					ExplorerTreeNode node = (ExplorerTreeNode) scl.getLastPathComponent();
-					Object obj = node.getUserObject();
-
-					if (!(obj instanceof File)) {
-						return;
-					}
-					File f = (File) obj;
-
-					if (!f.exists() || f.isDirectory()) {
-						return;
-					}
-					Icon icn;
-					String ext = f.getName();
-					if (ext.contains(".")) {
-						ext = ext.substring(ext.indexOf(".") + 1);
-						icn = IconPack.current.GetExtIcon(ext);
-					} else {
-						icn = IconPack.current.fileIcon;
-					}
-					
-					if (ext.matches("png|jpg|jpeg|bmp")) {
-						ImageView view = new ImageView(f);
-						BadApple.Get.tabPanel.tabbedPanel.addTab(f.getName(), icn, view);
-						DiscordPresence.SetCurrentFile(f, "Viewing");
-						return;
-					}
-					
-					Editor editor = new Editor();
-					
-					BadApple.Get.tabPanel.tabbedPanel.addTab(f.getName(), icn, editor);
-					editor.OpenFile(f);
-					DiscordPresence.SetCurrentFile(f, "Editing");
+					OpenFile(node);
 				}
 			}
 		});
@@ -161,7 +131,7 @@ public class FileExplorerView extends View {
 		root = new ExplorerTreeNode(f);
 		treeModel = new DefaultTreeModel(root);
 		tree.setModel(treeModel);
-		CreateChildNodes ccn = new CreateChildNodes(f, root);
+		CreateChildNodes ccn = new CreateChildNodes(this.tree, f, root);
 		thread = new Thread(ccn);
 		thread.start();
 
@@ -170,16 +140,38 @@ public class FileExplorerView extends View {
 
 	public void RecursiveDelete(File targetDirectory) {
 		Debug.Info("Deleting: " + targetDirectory.getPath());
-        File[] data = targetDirectory.listFiles();
+		File[] data = targetDirectory.listFiles();
 
-        for (File file : data) {
-            if(file.isDirectory())
-            	RecursiveDelete(file);
+		for (File file : data) {
+			if (file.isDirectory())
+				RecursiveDelete(file);
 
-            else
-                file.delete();
-        }
+			else
+				file.delete();
+		}
 
-        targetDirectory.delete();
-    }
+		targetDirectory.delete();
+	}
+
+	public void OpenFile(ExplorerTreeNode node) {
+		File f = (File) node.getUserObject();
+		if (!f.isFile())
+			return;
+		String ext = f.getName();
+		ImageIcon icn = IconPack.current.fileIcon;
+		if (ext.contains(".")) {
+			ext = ext.substring(ext.indexOf(".") + 1);
+			icn = IconPack.current.GetExtIcon(ext);
+		}
+		if (ext.matches("png|jpg|jpeg|bmp|jfif")) {
+			ImageView view = new ImageView(f);
+			BadApple.Get.tabPanel.tabbedPanel.addTab(f.getName(), icn, view);
+			DiscordPresence.SetCurrentFile(f, "Viewing");
+			return;
+		}
+		Editor editor = new Editor();
+		BadApple.Get.tabPanel.tabbedPanel.addTab(f.getName(), icn, editor);
+		editor.OpenFile(f);
+		DiscordPresence.SetCurrentFile(f, "Editing");
+	}
 }

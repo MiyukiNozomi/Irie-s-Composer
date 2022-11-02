@@ -1,7 +1,7 @@
 {
 	"lang-name": "日本語",
 	
-	"launcher-title": "Launching BadApple..",
+	"launcher-title": "BadApple初期化。。。",
 	
 	"menu-file": "ファイル",
 	"menu-file-open": "フォルダオープン",
@@ -41,7 +41,7 @@
 	"settings-title": "設定",
 	
 	"settings-page-ui": "インターフェース",
-	"settings-page-editor": "Editor",
+	"settings-page-editor": "ドエディタ",
 	
 	"settings-page-ui-theme": "テーマ",
 	"settings-page-ui-lang": "言語",
@@ -50,5 +50,8 @@
 	
 	"settings-editor-fontsize": "Font Size",
 	
-	"settings-page-select": "Click on an option on the left side."
+	"settings-page-select": "Click on an option on the left side.",
+	
+	"error-title": "Error!",	
+	"error-opening": "Failed to open: %F%"
 }

@@ -9,6 +9,7 @@
 		
 		"png": "internal://exts/img.png",
 		"jpg": "internal://exts/img.png",
+		"jfif": "internal://exts/img.png",
 		"jpeg": "internal://exts/img.png",
 		"bmp": "internal://exts/img.png",
 		

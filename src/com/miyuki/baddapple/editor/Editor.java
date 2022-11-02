@@ -6,12 +6,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -23,6 +25,7 @@ import javax.swing.undo.UndoManager;
 
 import com.miyuki.baddapple.BadApple;
 import com.miyuki.baddapple.Debug;
+import com.miyuki.baddapple.Language;
 import com.miyuki.baddapple.Registry;
 import com.miyuki.baddapple.Resource;
 import com.miyuki.baddapple.Theme;
@@ -146,6 +149,11 @@ public class Editor extends JPanel {
 				autoComplete.RequestShow();
 			}
 		});
+		
+		for (EditorAction action : Registry.editorActions.values()) {
+			document.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(action.keyStroke, action.actionName);
+			document.getActionMap().put(action.actionName, action.action);
+		}
 	}
 
 	private void MakeStrokes(int key, String name, AbstractAction action) {
@@ -185,7 +193,14 @@ public class Editor extends JPanel {
 			}
 		}
 		saved = true;
-		document.setText(Resource.GetFile(f.getPath()));
+		try {
+			document.setText(new String(Files.readAllBytes(Paths.get(f.getPath()))));
+		} catch (IOException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(BadApple.Get,
+					Language.GetKey("error-opening").replace("%F%", f.getName()), Language.GetKey("error-title"),
+					JOptionPane.ERROR_MESSAGE, null);
+		}
 		
 		// resetting it
 		undoManager.discardAllEdits();

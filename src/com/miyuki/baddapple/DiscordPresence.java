@@ -86,7 +86,7 @@ public class DiscordPresence {
 	public static final void SetCurrentFile(File editor, String activity) {
 		if (failed)
 			return;
-		presence.state = activity + editor.getName();
+		presence.state = activity + " " + editor.getName();
 		rpc.discordUpdatePresence(presence);
 	}
 }
