@@ -1,0 +1,15 @@
+{
+	"authors": [
+		"Shinoa Hiragi"
+	],
+	"copyright": "Copyright © 2022, Shinoa Hiragi",
+	"dependencies": {
+		"bindbc-raylib3": "~>2.0.0"
+	},
+    "versions": [
+        "English"
+    ],
+	"description": "A minimal D application.",
+	"license": "proprietary",
+	"name": "irie-composer"
+}

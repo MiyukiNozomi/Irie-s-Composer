@@ -1,0 +1,25 @@
+{
+	"general": {
+        "menu-background":"494949",
+        "menu-foreground":"EAEAEA",
+        "menu-selected": "282828",
+        "menu-border": "2D2D2D",
+
+        "background": "636363",
+
+        "tray-background": "3C3C3C",
+        "tray-foreground": "F2F2F2",
+        "tray-selected-foreground": "A06DFF",
+        "tray-hovering-foreground": "D0B5FF",
+
+        "explorer-selected": "D5A8FF",
+        "explorer-hovering": "AF9BC1",
+
+        "diviser": "2D2D2D",
+        "tray-title-bar-background": "494949",
+        "tray-title-bar-foreground": "EEEEEE",
+
+        "traycomp-background": "565656",
+        "traycomp-foreground": "F2F2F2"
+	}
+}
