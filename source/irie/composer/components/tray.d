@@ -21,12 +21,12 @@ public class Tray : Component {
         icons ~= TrayIcon(null, Resource.LoadIcon("tray/whiteicon.png"), IrieComposer.Get.settings);
 
         Select(&icons[0]);
+        this.dimension.x = 0;
+        this.dimension.width = 50;
     } 
 
     override void Update() {
-        this.dimension.x = 0;
         this.dimension.y = IrieComposer.Get.menuBar.GetHeight();
-        this.dimension.width = Math.Clamp!int(38, 50, GetScreenWidth() / 13);
         this.dimension.height =  GetScreenHeight() - this.dimension.y;
         
         Vector2 mousePosition = GetMousePosition();

@@ -7,6 +7,7 @@ import std.algorithm : sort;
 import std.algorithm.mutation :SwapStrategy;
 
 import irie.composer.common;
+import irie.composer.components.test;
 import irie.composer.traycomponents.base;
 
 import irie.platform.messagebox;
@@ -60,6 +61,8 @@ public class Explorer : TrayComponent {
     public static Texture folderIcon, folderOpenedIcon;
     public static Texture fileIcon;
 
+    double lastClickTime;
+
     static void LoadAssets() {
         folderIcon = Resource.LoadIcon("explorer/folder.png");
         folderOpenedIcon = Resource.LoadIcon("explorer/folderopened.png");
@@ -72,60 +75,79 @@ public class Explorer : TrayComponent {
         explorerForeground = Theme.GetColor("traycomp-foreground");
         selectedColor = Theme.GetColor("explorer-selected");
         hoverColor = Theme.GetColor("explorer-hovering");
-    }
 
-    Vector2 mousePos;
-    override void Update() {
-        super.Update();
-
-        mousePos = GetMousePosition();
-        if (!PointInsideDimension(mousePos.x, mousePos.y, childDimension))
-            return;
-
-        iconSize = cast(int)(cast(float)childDimension.width * 0.0634f);
-        iconSize = Math.Max(10, iconSize);
+        iconSize = 19;
         fontSize = iconSize;
         iconPadding = iconSize / 4;
         percentIconSize = cast(float)iconSize / cast(float)fileIcon.width;
+    }
+
+    Vector2 mousePos;
+    float wheelOffset = 0;
+    override void Update() {
+        super.Update();
+        mousePos = GetMousePosition();
+        if (!PointInsideDimension(mousePos.x, mousePos.y, childDimension))
+            return;
 
         if (rootNode.path == "")
             return;
 
         int defaultOffsetX = cast(int)(childDimension.x + childDimension.width * 0.02);
-        int defaultOffsetY = cast(int)(childDimension.y + childDimension.height * 0.02);
+        int defaultOffsetY = cast(int)(childDimension.y + childDimension.height * 0.02 + wheelOffset);
         childrenYOffset = 0;
+        
+        float wheel = GetMouseWheelMove();
+        if (wheel > 0) {
+            wheelOffset += wheel * (iconSize + iconPadding);
+        } else if (wheel < 0) {
+            wheelOffset -= -wheel * (iconSize + iconPadding);
+        }
+
         CheckNode(&rootNode, defaultOffsetX, defaultOffsetY);
     }
 
     void CheckNode(TreeNode* nd, int offsetX, int offsetY) {
-        Dimension collisionBox = Dimension(
-                                offsetX,offsetY,
-                                iconPadding + iconSize + cast(int)MeasureTextEx(Resource.YaheiUI, nd.name, fontSize, 1).x,
-                                iconSize);
+        offsetY += childrenYOffset;
+        if (offsetY < childDimension.height && offsetY > childDimension.y) {
+            Dimension collisionBox = Dimension(
+                                    offsetX,offsetY,
+                                    iconPadding + iconSize + cast(int)MeasureTextEx(Resource.YaheiUI, nd.name, fontSize, 1).x,
+                                    iconSize);
 
-        if (PointInsideDimension(mousePos.x, mousePos.y, collisionBox)) {
-            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                if (selected !is null)
-                    selected.selected = false;
-                selected = nd;
-                selected.selected = true;
+            if (PointInsideDimension(mousePos.x, mousePos.y, collisionBox)) {
+                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    if (nd == selected) {
+                        double tt = GetTime() - lastClickTime;
+                        if (tt > 0 && tt < 0.300) {
+                            OnClick();
+                        }
+                        lastClickTime = GetTime();
+                    }
+                    if (selected !is null)
+                        selected.selected = false;
+                    selected = nd;
+                    selected.selected = true;
 
-                if (selected.expanded)
-                    selected.OnRetract();
-                else
-                    selected.OnExpand();
-            } else
-            nd.hovering = true;
-        } else {
-            nd.hovering = false;
+                    if (selected.expanded)
+                        selected.OnRetract();
+                    else
+                        selected.OnExpand();
+                } else
+                nd.hovering = true;
+            } else {
+                nd.hovering = false;
+            }
         }
 
         if (nd.expanded) {
             offsetX += iconSize;
+            if (childrenYOffset > 0)
+                offsetY -= childrenYOffset;
             for (int i = 0; i < nd.children.length; i++) {
                 TreeNode* child = &nd.children[i];
                 offsetY += iconSize + iconPadding;
-                CheckNode(child, offsetX, childrenYOffset + offsetY);
+                CheckNode(child, offsetX, offsetY);
             }
             int childrenLength = cast(int)nd.children.length;
             childrenYOffset += (childrenLength * iconSize) + (childrenLength * iconPadding);
@@ -137,17 +159,11 @@ public class Explorer : TrayComponent {
         super.Draw();
         DrawRectangle(childDimension.x, childDimension.y, childDimension.width, childDimension.height, explorerBackground);
 
-        iconSize = cast(int)(cast(float)childDimension.width * 0.0634f);
-        iconSize = Math.Max(10, iconSize);
-        fontSize = iconSize;
-        iconPadding = iconSize / 4;
-        percentIconSize = cast(float)iconSize / cast(float)fileIcon.width;
-
         if (rootNode.path == "")
             return;
 
         int defaultOffsetX = cast(int)(childDimension.x + childDimension.width * 0.02);
-        int defaultOffsetY = cast(int)(childDimension.y + childDimension.height * 0.02);
+        int defaultOffsetY = cast(int)(childDimension.y + childDimension.height * 0.02 + wheelOffset);
 
         childrenYOffset = 0;
         DrawNode(&rootNode, defaultOffsetX, defaultOffsetY);
@@ -160,23 +176,27 @@ public class Explorer : TrayComponent {
     float percentIconSize;
 
     void DrawNode(TreeNode* nd, int offsetX, int offsetY) {
-        Color foreColor = nd.selected ? selectedColor : (nd.hovering ? hoverColor : explorerForeground);
-        if (nd.isDirectory)
-            DrawTextureEx(nd.children.length > 0 ? folderOpenedIcon : folderIcon,
-                          Vector2(offsetX, offsetY), 0, percentIconSize, foreColor);
-        else
-            DrawTextureEx(fileIcon,
-                          Vector2(offsetX, offsetY), 0, percentIconSize, foreColor);
+        offsetY += childrenYOffset;
+        if (offsetY < childDimension.height && offsetY > childDimension.y) {
+            Color foreColor = nd.selected ? selectedColor : (nd.hovering ? hoverColor : explorerForeground);
+            if (nd.isDirectory)
+                DrawTextureEx(nd.children.length > 0 ? folderOpenedIcon : folderIcon,
+                            Vector2(offsetX, offsetY), 0, percentIconSize, foreColor);
+            else
+                DrawTextureEx(fileIcon,
+                            Vector2(offsetX, offsetY), 0, percentIconSize, foreColor);
 
-        Vector2 texPos = Vector2(offsetX + iconSize + iconPadding, offsetY);
-        DrawTextEx(Resource.YaheiUI, nd.name, texPos, fontSize, 1, foreColor);
-
+            Vector2 texPos = Vector2(offsetX + iconSize + iconPadding, offsetY);
+            DrawTextEx(Resource.YaheiUI, nd.name, texPos, fontSize, 1, foreColor);
+        }
         if (nd.expanded) {
             offsetX += iconSize;
+            if (childrenYOffset > 0)
+                offsetY -= childrenYOffset;
             for (int i = 0; i < nd.children.length; i++) {
                 TreeNode* child = &nd.children[i];
                 offsetY += iconSize + iconPadding;
-                DrawNode(child, offsetX, childrenYOffset + offsetY);
+                DrawNode(child, offsetX, offsetY);
             }
             int childrenLength = cast(int)nd.children.length;
             childrenYOffset += (childrenLength * iconSize) + (childrenLength * iconPadding);
@@ -191,5 +211,13 @@ public class Explorer : TrayComponent {
 
         rootNode = TreeNode(true, dir, Explorer_GetFileName(dir).toStringz());
         rootNode.OnExpand();
+    }
+
+    public void OnClick() {
+        if (selected.isDirectory)
+            return;
+      //  Sys.Printfln("Explorer", "Opening: %s", selected.name.fromStringz());
+        
+        IrieComposer.Get.editorSplit.top.AddTab(selected.name, &fileIcon, new TestComponent(MAGENTA));
     }
 }

@@ -26,7 +26,7 @@ class MenuBar : Component {
     }
 
     override void Update() {
-        dimension = Dimension(0, 0, GetScreenWidth(), Math.Max(GetScreenHeight() / 23, 16));
+        dimension = Dimension(0, 0, GetScreenWidth(), 30);
         Vector2 mousePos = GetMousePosition();
 
         for (int i = 0; i < menus.length; i++) {

@@ -15,7 +15,7 @@ public class TrayComponent : Component {
     }
 
     override void Draw() {
-        float titleHeight = dimension.height / 16;
+        float titleHeight = 36;
         DrawRectangle(dimension.x, dimension.y, dimension.width, cast(int)titleHeight, this.background);
         childDimension = Dimension(dimension.x, cast(int)(dimension.y + titleHeight),
                                    dimension.width, cast(int)(dimension.height - titleHeight));

@@ -20,6 +20,9 @@
         "tray-title-bar-foreground": "EEEEEE",
 
         "traycomp-background": "565656",
-        "traycomp-foreground": "F2F2F2"
+        "traycomp-foreground": "F2F2F2",
+
+        "tabpanel-background": "0F0F0F",
+        "tabpanel-empty-logo": "282828"
 	}
 }

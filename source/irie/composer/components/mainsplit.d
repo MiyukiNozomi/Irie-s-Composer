@@ -23,6 +23,8 @@ public class MainSplit : Component {
         left.Update();
         right.Update();
         
+        diviserPosition = Math.Clamp!float(0, 1.0, diviserPosition);
+
         this.dimension = 
             Dimension(
                 IrieComposer.Get.tray.GetWidth(),
@@ -33,7 +35,6 @@ public class MainSplit : Component {
 
         // calculate dimensions of both components
         float width = this.dimension.width;
-        float height = this.dimension.height;
 
         float leftWidth = width * diviserPosition;
         float rightWidth = width - leftWidth;

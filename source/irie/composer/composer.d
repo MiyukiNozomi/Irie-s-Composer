@@ -11,6 +11,7 @@ import irie.composer.components.test;
 import irie.composer.components.tray;
 import irie.composer.components.menubar;
 import irie.composer.components.mainsplit;
+import irie.composer.components.editorsplit;
 import irie.composer.components.component;
 import irie.composer.traycomponents.explorer;
 import irie.composer.traycomponents.settings;
@@ -23,6 +24,7 @@ class IrieComposer {
     Tray tray;
     MenuBar menuBar;
     MainSplit mainSplit;
+    EditorSplit editorSplit;
     Explorer explorer;
     ModuleLister moduleList;
     Settings settings;
@@ -39,9 +41,10 @@ class IrieComposer {
 
     public void MakeUI() {
         settings = new Settings();
+        editorSplit = new EditorSplit();
         mainSplit = new MainSplit(new TestComponent(GREEN),
                                   0.25,
-                                  new TestComponent(RED));
+                                  editorSplit);
         menuBar = new MenuBar();
         explorer = new Explorer();
         moduleList = new ModuleLister();
@@ -52,16 +55,26 @@ class IrieComposer {
         while (!WindowShouldClose()) {
             BeginDrawing();
             ClearBackground(Theme.GetColor("background"));
-            //DrawTextEx(Resource.YaheiUI, "Test", Vector2(120, 120), 40, 1, LIGHTGRAY);
 
             mainSplit.Update();
             menuBar.Update();
             tray.Update();
+            editorSplit.Update();
 
             mainSplit.Draw();
             tray.Draw();
             menuBar.Draw();
 
+            debug {
+                version(Japanese) {
+                  DrawTextEx(Resource.YaheiUI, "Debug Build of Irie's Composer, JA_JP", Vector2(GetScreenWidth() / 4,
+                    GetScreenHeight() - 45),
+                    30, 1, BLUE);
+                } else
+                    DrawTextEx(Resource.YaheiUI, "Debug Build of Irie's Composer, EN_US", Vector2(GetScreenWidth() / 4,
+                    GetScreenHeight() - 45),
+                    30, 1, BLUE);
+            }
             EndDrawing();
         }
         Resource.Release();
