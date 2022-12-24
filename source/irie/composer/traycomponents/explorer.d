@@ -218,6 +218,6 @@ public class Explorer : TrayComponent {
             return;
       //  Sys.Printfln("Explorer", "Opening: %s", selected.name.fromStringz());
         
-        IrieComposer.Get.editorSplit.top.AddTab(selected.name, &fileIcon, new TestComponent(MAGENTA));
+        IrieComposer.Get.editorSplit.top.AddTab(selected.name, fileIcon, new TestComponent(DARKGRAY));
     }
 }

@@ -22,7 +22,13 @@
         "traycomp-background": "565656",
         "traycomp-foreground": "F2F2F2",
 
-        "tabpanel-background": "0F0F0F",
-        "tabpanel-empty-logo": "282828"
+        "tabpanel-background": "494949",
+        "tabpanel-empty-logo": "494949",
+
+        "tab-border": "EA79EA",
+        "tab-background": "202020",
+        "tab-selected-background": "EA79EA",
+        "tab-foreground": "FEFEFE",
+        "tab-selected-foreground": "010101"
 	}
 }
